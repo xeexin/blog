@@ -16,6 +16,7 @@ public class Blog {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    private String profileImg;
 
     private String title;
 }

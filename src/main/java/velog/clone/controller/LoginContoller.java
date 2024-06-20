@@ -4,27 +4,29 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import velog.clone.Const.SessionConst;
+import velog.clone.domain.Blog;
 import velog.clone.domain.User;
+import velog.clone.repository.BlogRepository;
 import velog.clone.service.UserService;
 
-import java.net.http.HttpRequest;
 import java.util.Optional;
 
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 public class LoginContoller {
     @Autowired
     private UserService userService;
+
+    private final BlogRepository blogRepository;
 
     @GetMapping("/login")
     public String showLoginPage(@ModelAttribute("user") User user) {
@@ -54,6 +56,7 @@ public class LoginContoller {
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_USER, existUser);
 
+
         attributes.addFlashAttribute("message", "로그인 성공");
         return "redirect:/";
     }
@@ -69,12 +72,5 @@ public class LoginContoller {
         }
 
         return "redirect:/";
-    }
-
-
-    private void exprieCookie(HttpServletResponse response, String cookieName) {
-        Cookie cookie = new Cookie(cookieName, null);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
     }
 }

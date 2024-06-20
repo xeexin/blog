@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>블로그 생성</title>
+    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/styles.css}" href="../css/styles.css" rel="stylesheet">
+    <style>
+        .form-container {
+            max-width: 480px;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 20px;
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .form-title {
+            text-align: center;
+            color: #0052cc;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .btn-primary {
+            background-color: #0052cc;
+            border-color: #0052cc;
+            font-size: 1rem;
+            padding: 0.75rem;
+            border-radius: 12px;
+            width: 100%;
+        }
+        .btn-primary:hover {
+            background-color: #0041a8;
+            border-color: #0041a8;
+        }
+    </style>
+</head>
+<body>
+<div class="container form-container">
+    <h2 class="form-title">블로그 생성</h2>
+    <form th:action="@{|/${user.id}/createBlog|}" method="post">
+        <div class="form-group">
+            <label for="username">사용자명</label>
+            <input type="text" id="username" th:value="${user.username}" class="form-control" disabled>
+        </div>
+        <div class="form-group">
+            <label for="email">이메일</label>
+            <input type="email" id="email" th:value="${user.email}" class="form-control" disabled>
+        </div>
+        <div class="form-group">
+            <label for="title">블로그 제목</label>
+            <input type="text" id="title" name="title" class="form-control" placeholder="블로그 제목을 입력하세요" required>
+        </div>
+        <div class="form-group">
+            <label for="profileImg">프로필 이미지 URL</label>
+            <input type="text" id="profileImg" name="profileImg" class="form-control" placeholder="프로필 이미지 URL을 입력하세요">
+        </div>
+        <button type="submit" class="btn btn-primary">저장</button>
+    </form>
+</div>
+</body>
+</html>

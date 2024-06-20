@@ -22,8 +22,6 @@ public class User {
     @NotEmpty
     private String password;
 
-    //추가예정
-//    private String profileImage;
 
     // 한명의 유저는 하나의 블로그를 가질 수 있다.
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
