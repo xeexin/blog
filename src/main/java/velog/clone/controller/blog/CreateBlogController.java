@@ -2,7 +2,6 @@ package velog.clone.controller.blog;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,14 +10,13 @@ import velog.clone.domain.Blog;
 import velog.clone.domain.User;
 import velog.clone.repository.BlogRepository;
 import velog.clone.repository.UserRepository;
-import velog.clone.service.UserService;
 
 import java.util.Optional;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-public class createBlogController {
+public class CreateBlogController {
 
     private final UserRepository userRepository;
     private final BlogRepository blogRepository;

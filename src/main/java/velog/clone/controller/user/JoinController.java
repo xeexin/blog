@@ -1,5 +1,6 @@
 package velog.clone.controller.user;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,16 +10,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import velog.clone.domain.User;
-import velog.clone.service.UserService;
+import velog.clone.repository.UserRepository;
 
 
 
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 public class JoinController {
-    @Autowired
-    private UserService userService;
+    private final UserRepository userRepository;
+
 
     @GetMapping("/join")
     public String showJoinForm(@ModelAttribute("user") User user) {
@@ -30,8 +32,9 @@ public class JoinController {
                                @RequestParam("passwordConfirm") String passwordConfirm,
                                Model model) {
 
-        // email 중복 불가능
-        if (userService.existsByEmail(user.getEmail())) {
+
+        //email 중복
+        if (userRepository.existsByEmail(user.getEmail())) {
             model.addAttribute("error", "이미 사용 중인 이메일 입니다.");
             return "join";
         }
@@ -42,8 +45,7 @@ public class JoinController {
             return "join";
         }
 
-
-        userService.createUser(user);
+        userRepository.save(user);
 
         return "redirect:/login";
     }
