@@ -15,7 +15,7 @@ public class Post {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="bolgId",nullable = false)
+    @JoinColumn(name="blog_id",nullable = false)
     private Blog blog;
 
 

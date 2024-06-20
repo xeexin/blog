@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -37,5 +36,8 @@ public class User {
     // 한명의 유저는 여러명을 팔로잉 할 수 있다.
     @OneToMany(mappedBy = "following", cascade = CascadeType.ALL)
     private List<Following> followingList;
+
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.BASIC;
 
 }

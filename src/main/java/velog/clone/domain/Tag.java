@@ -13,7 +13,7 @@ public class Tag {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "postId", nullable = false)
+    @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
     private String hashtag;
