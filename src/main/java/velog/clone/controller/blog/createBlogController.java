@@ -1,4 +1,4 @@
-package velog.clone.controller;
+package velog.clone.controller.blog;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -41,7 +41,7 @@
         <a th:href="@{/logout}" class="logout-button">로그아웃</a>
     </div>x
     <div th:if="${blog}">
-        <a th:href="@{|/${user.id}/mypage|}" class="logout-button">내 블로그</a>
+        <a th:href="@{|/${user.id}/blogMain|}" class="logout-button">내 블로그</a>
     </div>
     <div th:if="${!blog}">
         <a th:href="@{|/${user.id}/createBlog|}" class="logout-button">블로그 만들기</a>

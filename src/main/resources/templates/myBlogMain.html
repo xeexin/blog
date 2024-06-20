@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>블로그 메인</title>
+    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/styles.css}" href="../css/styles.css" rel="stylesheet">
+    <style>
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: #f3f4f6;
+            border-bottom: 2px solid #e3e3e3;
+        }
+        .header h2 {
+            margin: 0;
+            color: #0052cc;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .header a {
+            color: #0052cc;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid #0052cc;
+            border-radius: 8px;
+        }
+        .header a:hover {
+            background-color: #0052cc;
+            color: white;
+        }
+        .blog-main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 200px;
+            text-align: center;
+        }
+        .blog-profile-img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border: 3px solid #0052cc;
+        }
+        .blog-username {
+            font-size: 1.25rem;
+            color: #333;
+            margin-top: 1rem;
+        }
+        .blog-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-top: 0.5rem;
+            font-weight: bold;
+        }
+        main {
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <h2 th:text="${user.username} + '.log'">블로그 이름</h2> <!-- 화면 맨위 좌측 상단 -->
+        <a th:if="${user != null}" th:href="@{|/${user.id}/post|}">글쓰기</a> <!-- 화면 맨위 우측 상단 -->
+    </header>
+    <div class="blog-main"> <!-- 위쪽에서 200 px 떨어진 중앙 -->
+        <div th:if="${blog != null}">
+            <img th:src="${blog.profileImg}" alt="블로그 프로필 이미지" class="blog-profile-img">
+            <h1 class="blog-username" th:text="${user.username}">이름</h1>
+            <h1 class="blog-title" th:text="${blog.title}">블로그 제목</h1>
+        </div>
+        <div th:if="${blog == null}">
+            <p>블로그 정보가 없습니다.</p>
+        </div>
+    </div>
+    <main>
+        <!-- 여기에 블로그 메인 콘텐츠가 들어갑니다 -->
+    </main>
+</div>
+</body>
+</html>
