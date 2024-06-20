@@ -1,17 +1,19 @@
 package velog.clone.controller;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import velog.clone.Const.SessionConst;
 import velog.clone.domain.User;
 import velog.clone.service.UserService;
 
@@ -30,7 +32,7 @@ public class LoginContoller {
     }
 
     @PostMapping("/login")
-    public String loginRegi(@ModelAttribute("user") User user, Model model, RedirectAttributes attributes, HttpServletResponse response) {
+    public String loginRegi(@ModelAttribute("user") User user, Model model, RedirectAttributes attributes, HttpServletRequest request) {
 
         // 이메일 존재 여부 확인
         Optional<User> existUserOptional = userService.findByEmail(user.getEmail());
@@ -49,16 +51,23 @@ public class LoginContoller {
             return "login";
         }
 
-        Cookie idCookie = new Cookie("userId", String.valueOf(existUser.getId()));
-        response.addCookie(idCookie);
+        HttpSession session = request.getSession();
+        session.setAttribute(SessionConst.LOGIN_USER, existUser);
+
         attributes.addFlashAttribute("message", "로그인 성공");
         return "redirect:/";
     }
 
+
     @GetMapping("/logout")
     @PostMapping("/logout")
-    public String logout(HttpServletResponse response) {
-        exprieCookie(response, "userId");
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            session.invalidate();
+        }
+
         return "redirect:/";
     }
 
