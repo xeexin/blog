@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posting</title>
+    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 720px;
+            margin: 20px auto;
+        }
+        .btn {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>포스팅</h1>
+    <form th:action="@{|/${user.id}/writingPost|}" th:object="${post}" method="post">
+        <div class="form-group">
+            <label for="title">포스트 제목</label>
+            <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="포스트 제목을 입력하세요" required>
+        </div>
+        <div class="form-group">
+            <label for="content">포스트 내용</label>
+            <textarea id="content" th:field="*{content}" class="form-control" rows="10" placeholder="포스트 내용을 입력하세요" required></textarea>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">포스팅하기</button>
+            <button type="button" class="btn btn-secondary" onclick="saveDraft()">임시저장</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function saveDraft() {
+        // 임시저장 로직을 여기에 추가합니다.
+        alert('임시저장 기능은 아직 구현되지 않았습니다.');
+    }
+</script>
+</body>
+</html>

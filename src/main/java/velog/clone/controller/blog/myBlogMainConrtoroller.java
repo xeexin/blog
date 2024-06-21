@@ -28,12 +28,12 @@ public class myBlogMainConrtoroller {
             Optional<Blog> blogUser = blogRepository.findByUserId(existUser.getId());
 
             model.addAttribute("user", existUser);
-
             if (blogUser.isPresent()) {
                 model.addAttribute("blog", blogUser.get());
             } else {
                 model.addAttribute("blog", null);
             }
+
             return "/myBlogMain";
         }
         return "redirect:/";

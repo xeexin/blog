@@ -67,7 +67,7 @@
 <div class="container">
     <header class="header">
         <h2 th:text="${user.username} + '.log'">블로그 이름</h2> <!-- 화면 맨위 좌측 상단 -->
-        <a th:if="${user != null}" th:href="@{|/${user.id}/post|}">글쓰기</a> <!-- 화면 맨위 우측 상단 -->
+        <a th:if="${user != null}" th:href="@{|/${user.id}/writingPost|}">글쓰기</a> <!-- 화면 맨위 우측 상단 -->
     </header>
     <div class="blog-main"> <!-- 위쪽에서 200 px 떨어진 중앙 -->
         <div th:if="${blog != null}">
