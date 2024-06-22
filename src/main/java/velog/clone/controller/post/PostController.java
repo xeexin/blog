@@ -74,4 +74,31 @@ public class PostController {
         model.addAttribute("message", "포스팅 완료");
         return "redirect:/";
     }
+
+    @PostMapping("/{id}/post/draft")
+    public String saveDraft(@PathVariable Long id, @ModelAttribute Post post, Model model) {
+
+        Optional<User> user = userRepository.findById(id);
+        if (!user.isPresent()) {
+            model.addAttribute("error", "사용자를 찾을 수 없습니다.");
+            return "redirect:/";
+        }
+
+        Optional<Blog> blogUser = blogRepository.findByUserId(user.get().getId());
+        if (!blogUser.isPresent()) {
+            model.addAttribute("error", "블로그를 찾을 수 없습니다.");
+            return "redirect:/";
+        }
+
+        Post newPost = new Post();
+        newPost.setBlog(blogUser.get());
+        newPost.setDraft(true);
+        newPost.setCreatedAt(LocalDateTime.now());
+        newPost.setContent(post.getContent());
+        newPost.setTitle(post.getTitle());
+        postRepository.save(newPost);
+
+        model.addAttribute("message", "임시저장 완료");
+        return "redirect:/";
+    }
 }

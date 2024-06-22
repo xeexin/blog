@@ -6,6 +6,31 @@
     <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
     <link th:href="@{/css/styles.css}" href="../css/styles.css" rel="stylesheet">
     <style>
+        /* Body 스타일 */
+        body {
+            background-color: #f3f4f6;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        /* 컨테이너 스타일 */
+        .welcome-container {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+
+        .welcome-message {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #0052cc;
+            font-weight: bold;
+        }
+
         .logout-button {
             font-size: 1rem;
             padding: 0.75rem;
@@ -18,18 +43,45 @@
             text-decoration: none;
             display: inline-block;
             margin: 0.5rem;
+            transition: background-color 0.3s ease;
         }
+
         .logout-button:hover {
             background-color: #0041a8;
             border-color: #0041a8;
         }
-        .welcome-container {
-            text-align: center;
-            margin-top: 2rem;
+
+        /* 블로그 컨테이너 스타일 */
+        .blog-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 1rem;
         }
-        .welcome-message {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
+
+        .post {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-title {
+            font-size: 1.75rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .post-content {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .post-meta {
+            font-size: 0.875rem;
+            color: #888;
         }
     </style>
 </head>
@@ -47,8 +99,15 @@
         <a th:href="@{|/${user.id}/createBlog|}" class="logout-button">블로그 만들기</a>
     </div>
 </div>
-<main>
-
+<main class="blog-container">
+    <div th:each="post : ${posts}" class="post">
+        <h2 class="post-title" th:text="${post.title}"></h2>
+        <p class="post-content" th:text="${#strings.abbreviate(post.content, 10)}"></p>
+        <div class="post-meta">
+            <p>작성자 : <span th:text="${user.username}"></span></p>
+            <p>작성일시 : <span th:text="${post.createdAt}"></span></p>
+        </div>
+    </div>
 </main>
 </body>
 </html>

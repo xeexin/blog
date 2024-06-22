@@ -1,8 +1,10 @@
 <!doctype html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Posting</title>
     <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -18,7 +20,7 @@
 <body>
 <div class="container">
     <h1>포스팅</h1>
-    <form th:action="@{|/${user.id}/writingPost|}" th:object="${post}" method="post">
+    <form id="postForm" th:action="@{'/' + ${user.id} + '/writingPost'}" th:object="${post}" method="post">
         <div class="form-group">
             <label for="title">포스트 제목</label>
             <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="포스트 제목을 입력하세요" required>
@@ -34,10 +36,14 @@
     </form>
 </div>
 
-<script>
+<script th:inline="javascript">
     function saveDraft() {
-        // 임시저장 로직을 여기에 추가합니다.
-        alert('임시저장 기능은 아직 구현되지 않았습니다.');
+        var userId = [[${user.id}]]; // user.id 값 삽입
+        var form = document.getElementById('postForm');
+
+        form.action = '/' + userId + '/post/draft';
+        form.method = 'post';
+        form.submit();
     }
 </script>
 </body>
