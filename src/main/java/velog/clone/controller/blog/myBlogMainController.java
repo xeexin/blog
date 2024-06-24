@@ -25,6 +25,7 @@ public class myBlogMainController {
 
     @GetMapping("/{id}/blogMain")
     public String showMyBlogMain(@PathVariable("id") Long id, Model model) {
+
         Optional<User> user = userRepository.findById(id);
 
         if (user.isPresent()) {
@@ -33,15 +34,15 @@ public class myBlogMainController {
 
             model.addAttribute("user", existUser);
             if (blogUser.isPresent()) {
-                model.addAttribute("blog", blogUser.get());
 
+                model.addAttribute("blog", blogUser.get());
                 List<Post> posts = postRepository.findByBlogId(blogUser.get().getId());
                 model.addAttribute("posts", posts);
+
+                return "/myBlogMain";
             } else {
                 model.addAttribute("blog", null);
             }
-
-            return "/myBlogMain";
         }
         return "redirect:/";
 

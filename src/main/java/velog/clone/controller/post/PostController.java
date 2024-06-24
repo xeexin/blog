@@ -86,36 +86,43 @@ public class PostController {
     }
 
     @GetMapping("/posts/{postId}")
-    public String viewPost(@PathVariable Long postId, Model model) {
+    public String viewPost(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser, @PathVariable Long postId, Model model) {
         Optional<Post> post = postRepository.findById(postId);
+        Optional<User> user = userRepository.findById(loginUser.getId());
+        List<Comment> comments = commentRepository.findByPostId(postId);
 
-        if (!post.isPresent()  ) {
+        if (!post.isPresent() || !user.isPresent()) {
             model.addAttribute("error", "포스트 또는 사용자를 찾을 수 없습니다.");
             return "redirect:/";
         }
 
-
         model.addAttribute("post", post.get());
-        return "viewPost";
-    }
-
-    @GetMapping("/user/{userId}/posts/{postId}")
-    public String viewPost(@PathVariable Long userId, @PathVariable Long postId, Model model) {
-        Optional<Post> post = postRepository.findById(postId);
-        Optional<User> user = userRepository.findById(userId);
-
-        if (!post.isPresent()) {
-            model.addAttribute("error", "포스트를 찾을 수 없습니다.");
-            return "redirect:/";
-        }
-
-        if (!user.isPresent()) {
-            model.addAttribute("error", "사용자를 찾을 수 없습니다.");
-            return "redirect:/";
-        }
-
         model.addAttribute("user", user.get());
-        model.addAttribute("post", post.get());
+        model.addAttribute("comments", comments);
+        model.addAttribute("newComment", new Comment());
         return "viewPost";
     }
+
+//    @GetMapping("/user/{userId}/posts/{postId}")
+//    public String viewPost(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser, @PathVariable Long userId, @PathVariable Long postId, Model model) {
+//        Optional<Post> post = postRepository.findById(postId);
+//        Optional<User> user = userRepository.findById(userId);
+//        List<Comment> comments = commentRepository.findByPostId(postId); // 댓글 목록 추가
+//
+//        if (!post.isPresent()) {
+//            model.addAttribute("error", "포스트를 찾을 수 없습니다.");
+//            return "redirect:/";
+//        }
+//
+//        if (!user.isPresent()) {
+//            model.addAttribute("error", "사용자를 찾을 수 없습니다.");
+//            return "redirect:/";
+//        }
+//
+//        model.addAttribute("post", post.get());
+//        model.addAttribute("user", user.get());
+//        model.addAttribute("comments", comments);
+//        model.addAttribute("newComment", new Comment());
+//        return "viewPost";
+//    }
 }

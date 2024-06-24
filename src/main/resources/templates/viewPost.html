@@ -28,6 +28,42 @@
             font-size: 0.875rem;
             color: #888;
         }
+        .comments-section {
+            margin-top: 2rem;
+        }
+        .comment {
+            border-top: 1px solid #ddd;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+        .comment .comment-user {
+            font-weight: bold;
+            color: #0052cc;
+        }
+        .comment .comment-reply {
+            margin-top: 0.5rem;
+            color: #555;
+        }
+        .comment .comment-meta {
+            font-size: 0.875rem;
+            color: #888;
+        }
+        .comment-form {
+            margin-top: 2rem;
+        }
+        .comment-form .form-group {
+            margin-bottom: 1rem;
+        }
+        .comment-form .form-control {
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 1rem;
+        }
+        .comment-form .btn {
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -37,12 +73,29 @@
         <div class="post-content" th:text="${post.content}">포스트 내용</div>
         <div class="post-meta">
             <p>작성자: <span th:text="${post.blog.user.username}"></span></p>
-            <p>작성일시 : <span th:text="${post.createdAt}">작성일시</span></p>
+            <p>작성일시 : <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}">작성일시</span></p>
+        </div>
+    </div>
+    <div class="comments-section">
+        <h2>댓글</h2>
+        <div th:each="comment : ${comments}" class="comment">
+            <p class="comment-user" th:text="${comment.user.username}">사용자명</p>
+            <p class="comment-reply" th:text="${comment.reply}">댓글 내용</p>
+            <div class="comment-meta">
+                <p>작성일시: <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+            </div>
+        </div>
+        <div class="comment-form">
+            <h3>댓글 작성</h3>
+            <form th:action="@{|/posts/${post.id}/comments|}" method="post">
+                <div class="form-group">
+                    <label for="reply">댓글</label>
+                    <textarea id="reply" name="reply" class="form-control" placeholder="댓글을 입력하세요" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">댓글 달기</button>
+            </form>
         </div>
     </div>
 </div>
-//코멘트 달기
-// comment.user
-
 </body>
 </html>

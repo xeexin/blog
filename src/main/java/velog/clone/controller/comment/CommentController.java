@@ -13,7 +13,6 @@ import velog.clone.repository.CommentRepository;
 import velog.clone.repository.PostRepository;
 import velog.clone.repository.UserRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -21,49 +20,46 @@ import java.util.Optional;
 public class CommentController {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
-    private final BlogRepository blogRepository;
 
-    @PostMapping("/post/{postId}/comments")
-    public String addComment(@PathVariable Long postId,@RequestParam String reply, Model model) {
+    @PostMapping("/posts/{postId}/comments")
+    public String addComment(@PathVariable Long postId,@RequestParam String reply, Model model, @SessionAttribute(name = SessionConst.LOGIN_USER) User user ) {
 
-        Optional<Post> post = postRepository.findById(postId);
+        Optional<Post> postOptional = postRepository.findById(postId);
 
-        if (!post.isPresent() ) {
-            model.addAttribute("error", "포스트 또는 사용자를 찾을 수 없습니다.");
+        if (!postOptional.isPresent()) {
+            model.addAttribute("error", "포스트가 없습니다.");
             return "redirect:/";
         }
 
-        Comment comment = new Comment();
-        comment.setPost(post.get());
-//        comment.setUser(user.get());
-        comment.setReply(reply);
-        commentRepository.save(comment);
+        Comment newComment = new Comment();
 
-        return "viewPost";
+        Post post = postOptional.get();
+        newComment.setPost(post);
+        newComment.setReply(reply);
+        newComment.setUser(user);
+        commentRepository.save(newComment);
+
+        model.addAttribute("post", post);
+        model.addAttribute("newComment", newComment);
+        return "redirect:/posts/{postId}";
     }
 
-//    @GetMapping("/post/{postId}")
-//    public String viewPost(@PathVariable Long userId, @PathVariable Long postId, @SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser, Model model) {
+//    @PostMapping("/user/{userId}/post/{postId}/comments")
+//    public String addMyComment(@PathVariable Long postId,@RequestParam String reply, Model model, @SessionAttribute(name = SessionConst.LOGIN_USER) User user) {
 //
-//        Optional<Post> post = postRepository.findById(postId);
-//        Optional<User> user = userRepository.findById(loginUser.getId());
+//        Optional<Post> postOptional = postRepository.findById(postId);
 //
-//        if (!post.isPresent()) {
-//            model.addAttribute("error", "포스트를 찾을 수 없습니다.");
-//            return "redirect:/";
+//        if (postOptional.isPresent()) {
+//            Post post = postOptional.get();
+//            Comment newComment = new Comment();
+//
+//            newComment.setPost(post);
+//            newComment.setReply(reply);
+//            newComment.setUser(user);
+//            commentRepository.save(newComment);
+//
+//            model.addAttribute("newComment", newComment);
 //        }
-//
-//        if (!user.isPresent()) {
-//            model.addAttribute("error", "사용자를 찾을 수 없습니다.");
-//            return "redirect:/";
-//        }
-//
-//        List<Comment> comments = commentRepository.findByPostId(postId);
-//
-//        model.addAttribute("user", user.get());
-//        model.addAttribute("post", post.get());
-//        model.addAttribute("comments", comments);
 //        return "viewPost";
 //    }
 }
