@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
-public class myBlogMainConrtoroller {
+public class myBlogMainController {
 
     private final UserRepository userRepository;
     private final BlogRepository blogRepository;
@@ -35,12 +35,8 @@ public class myBlogMainConrtoroller {
             if (blogUser.isPresent()) {
                 model.addAttribute("blog", blogUser.get());
 
-                // 사용자의 글 불러오기
                 List<Post> posts = postRepository.findByBlogId(blogUser.get().getId());
                 model.addAttribute("posts", posts);
-
-                return "/myBlogMain";
-
             } else {
                 model.addAttribute("blog", null);
             }

@@ -3,12 +3,12 @@ package velog.clone.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import velog.clone.Const.SessionConst;
 import velog.clone.domain.Blog;
 import velog.clone.domain.Post;
@@ -37,6 +37,7 @@ public class HomeController {
 
         Optional<Blog> userBlog = blogRepository.findByUserId(loginUser.getId());
         if (userBlog.isPresent()) {
+
             model.addAttribute("blog", true);
 
             // 모든 포스팅 글 받기
@@ -49,5 +50,6 @@ public class HomeController {
 
         return "loginHome";
     }
-
 }
+
+

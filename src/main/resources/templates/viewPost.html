@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>포스트 보기</title>
+    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/styles.css}" href="../css/styles.css" rel="stylesheet">
+    <style>
+        .post-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .post-title {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .post-content {
+            font-size: 1.25rem;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        .post-meta {
+            font-size: 0.875rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="post-container">
+        <h1 class="post-title" th:text="${post.title}">포스트 제목</h1>
+        <div class="post-content" th:text="${post.content}">포스트 내용</div>
+        <div class="post-meta">
+            <p>작성자: <span th:text="${post.blog.user.username}"></span></p>
+            <p>작성일시 : <span th:text="${post.createdAt}">작성일시</span></p>
+        </div>
+    </div>
+</div>
+//코멘트 달기
+// comment.user
+
+</body>
+</html>

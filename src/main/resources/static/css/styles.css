@@ -1,0 +1,249 @@
+<<<<<<< HEAD
+=======
+/* Common Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 720px;
+    margin: 40px auto;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-container {
+    max-width: 400px;
+    margin: 60px auto;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+    text-align: center;
+    color: #0052cc;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-control {
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+}
+
+.btn {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background-color: #0052cc;
+    border-color: #0052cc;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0041a8;
+    border-color: #0041a8;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+/* Header Styles */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f3f4f6;
+    border-bottom: 2px solid #e3e3e3;
+}
+
+.header h2 {
+    margin: 0;
+    color: #0052cc;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.header a {
+    color: #0052cc;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #0052cc;
+    border-radius: 8px;
+}
+
+.header a:hover {
+    background-color: #0052cc;
+    color: white;
+}
+
+/* Blog Main Styles */
+.blog-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+    text-align: center;
+}
+
+.blog-profile-img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 3px solid #0052cc;
+}
+
+.blog-username {
+    font-size: 1.25rem;
+    color: #333;
+    margin-top: 1rem;
+}
+
+.blog-title {
+    font-size: 1.5rem;
+    color: #333;
+    margin-top: 0.5rem;
+    font-weight: bold;
+}
+
+/* Post List Styles */
+.post {
+    padding: 1rem;
+    border-bottom: 1px solid #e3e3e3;
+    margin-bottom: 1rem;
+}
+
+.post-title {
+    font-size: 1.25rem;
+    color: #0052cc;
+    margin-bottom: 0.5rem;
+}
+
+.post-content {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.post-meta {
+    font-size: 0.875rem;
+    color: #888;
+}
+/* Common Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    max-width: 720px;
+    margin: 40px auto;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 20px;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+    text-align: center;
+    color: #0052cc;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-control {
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+}
+
+.btn {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background-color: #0052cc;
+    border-color: #0052cc;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0041a8;
+    border-color: #0041a8;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+.text-danger {
+    color: #e60000;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Center alignment for login and signup pages */
+body.centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+>>>>>>> 52b5821 (상세 블로그 가기)

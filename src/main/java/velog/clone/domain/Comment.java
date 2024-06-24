@@ -3,6 +3,9 @@ package velog.clone.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -21,5 +24,8 @@ public class Comment {
     private User user;
 
     private String reply;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt; // 생성일자
 
 }
