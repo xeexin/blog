@@ -36,6 +36,7 @@ public class myBlogMainController {
             if (blogUser.isPresent()) {
 
                 model.addAttribute("blog", blogUser.get());
+
                 List<Post> posts = postRepository.findByBlogId(blogUser.get().getId());
                 model.addAttribute("posts", posts);
 

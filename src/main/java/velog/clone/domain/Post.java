@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,5 +27,10 @@ public class Post {
 
     @CreationTimestamp
     private LocalDateTime createdAt; // 생성일자
+
+    @OneToMany(mappedBy = "post")
+    private List<Likes> likes;
+
+
 
 }

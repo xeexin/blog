@@ -7,9 +7,11 @@ import velog.clone.domain.Comment;
 import velog.clone.domain.Post;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByBlogId(Long id);
+
 
     Comment save(Comment comment);
 

@@ -64,6 +64,18 @@
             padding: 0.75rem;
             font-size: 1rem;
         }
+        .like-section {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .like-section button {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: red;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -74,6 +86,12 @@
         <div class="post-meta">
             <p>작성자: <span th:text="${post.blog.user.username}"></span></p>
             <p>작성일시 : <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}">작성일시</span></p>
+        </div>
+        <div class="like-section">
+            <form th:action="@{|/posts/${post.id}/like|}" method="post">
+                <button type="submit" th:text="${likedByUser ? '♥' : '♡'}"></button>
+            </form>
+            <span th:text="'좋아요 ' + ${cntLike} + '개'"></span>
         </div>
     </div>
     <div class="comments-section">

@@ -5,14 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import velog.clone.Const.SessionConst;
-import velog.clone.domain.Blog;
-import velog.clone.domain.Comment;
-import velog.clone.domain.Post;
-import velog.clone.domain.User;
-import velog.clone.repository.BlogRepository;
-import velog.clone.repository.CommentRepository;
-import velog.clone.repository.PostRepository;
-import velog.clone.repository.UserRepository;
+import velog.clone.domain.*;
+import velog.clone.repository.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,6 +20,7 @@ public class PostController {
     private final BlogRepository blogRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private final LikeRepository likeRepository;
 
     //글 쓰기
     @GetMapping("/{id}/writePost")
@@ -88,41 +83,30 @@ public class PostController {
     @GetMapping("/posts/{postId}")
     public String viewPost(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser, @PathVariable Long postId, Model model) {
         Optional<Post> post = postRepository.findById(postId);
-        Optional<User> user = userRepository.findById(loginUser.getId());
         List<Comment> comments = commentRepository.findByPostId(postId);
 
-        if (!post.isPresent() || !user.isPresent()) {
-            model.addAttribute("error", "포스트 또는 사용자를 찾을 수 없습니다.");
+        if (!post.isPresent()) {
+            model.addAttribute("error", "포스트를 찾을 수 없습니다.");
             return "redirect:/";
         }
 
+        boolean likedByUser = false;
+        Long cntLike = null;
+
+        if (loginUser != null) {
+            Optional<Likes> like = likeRepository.findByPostAndUser(post.get(), loginUser);
+            likedByUser = like.isPresent();
+
+            cntLike = likeRepository.countByPostIdAndLikeItTrue(postId);
+        }
+
+
         model.addAttribute("post", post.get());
-        model.addAttribute("user", user.get());
         model.addAttribute("comments", comments);
         model.addAttribute("newComment", new Comment());
+        model.addAttribute("likedByUser", likedByUser);
+        model.addAttribute("cntLike", cntLike);
         return "viewPost";
     }
 
-//    @GetMapping("/user/{userId}/posts/{postId}")
-//    public String viewPost(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser, @PathVariable Long userId, @PathVariable Long postId, Model model) {
-//        Optional<Post> post = postRepository.findById(postId);
-//        Optional<User> user = userRepository.findById(userId);
-//        List<Comment> comments = commentRepository.findByPostId(postId); // 댓글 목록 추가
-//
-//        if (!post.isPresent()) {
-//            model.addAttribute("error", "포스트를 찾을 수 없습니다.");
-//            return "redirect:/";
-//        }
-//
-//        if (!user.isPresent()) {
-//            model.addAttribute("error", "사용자를 찾을 수 없습니다.");
-//            return "redirect:/";
-//        }
-//
-//        model.addAttribute("post", post.get());
-//        model.addAttribute("user", user.get());
-//        model.addAttribute("comments", comments);
-//        model.addAttribute("newComment", new Comment());
-//        return "viewPost";
-//    }
 }

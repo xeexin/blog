@@ -38,4 +38,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role = Role.BASIC;
 
+    @OneToMany(mappedBy = "user")
+    private List<Likes> likes;
+
+
 }

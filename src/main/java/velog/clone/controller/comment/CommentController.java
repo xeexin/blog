@@ -8,10 +8,8 @@ import velog.clone.Const.SessionConst;
 import velog.clone.domain.Comment;
 import velog.clone.domain.Post;
 import velog.clone.domain.User;
-import velog.clone.repository.BlogRepository;
 import velog.clone.repository.CommentRepository;
 import velog.clone.repository.PostRepository;
-import velog.clone.repository.UserRepository;
 
 import java.util.Optional;
 
@@ -43,23 +41,4 @@ public class CommentController {
         model.addAttribute("newComment", newComment);
         return "redirect:/posts/{postId}";
     }
-
-//    @PostMapping("/user/{userId}/post/{postId}/comments")
-//    public String addMyComment(@PathVariable Long postId,@RequestParam String reply, Model model, @SessionAttribute(name = SessionConst.LOGIN_USER) User user) {
-//
-//        Optional<Post> postOptional = postRepository.findById(postId);
-//
-//        if (postOptional.isPresent()) {
-//            Post post = postOptional.get();
-//            Comment newComment = new Comment();
-//
-//            newComment.setPost(post);
-//            newComment.setReply(reply);
-//            newComment.setUser(user);
-//            commentRepository.save(newComment);
-//
-//            model.addAttribute("newComment", newComment);
-//        }
-//        return "viewPost";
-//    }
 }
