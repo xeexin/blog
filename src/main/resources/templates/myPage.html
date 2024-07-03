@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Page</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+        .profile-container {
+            margin-top: 50px;
+        }
+        .profile-info {
+            margin-left: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container profile-container">
+    <div class="row">
+        <div class="col-md-4 text-center">
+            <img th:src="@{${blog.profileImg.attachFile.storeFileName}}" alt="Profile Image" class="profile-img">
+            <h2 th:text="${user.username}">Username</h2>
+        </div>
+        <div class="col-md-8 profile-info">
+            <h3>개인 정보</h3>
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th>Name:</th>
+                    <td th:text="${user.username}">Name</td>
+                </tr>
+                <tr>
+                    <th>Email:</th>
+                    <td th:text="${user.email}">Email</td>
+                </tr>
+                <tr>
+                    <th>Blog Title:</th>
+                    <td th:text="${blog.title}">Blog Title</td>
+                </tr>
+                </tbody>
+            </table>
+            <a href="#" class="btn btn-primary">Edit Profile</a>
+            <a href="#" class="btn btn-secondary">Change Profile Image</a>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

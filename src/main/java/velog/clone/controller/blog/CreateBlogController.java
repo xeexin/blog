@@ -5,12 +5,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import velog.clone.File.FileStore;
+import velog.clone.controller.Img.ImgForm;
 import velog.clone.domain.Blog;
+import velog.clone.File.UploadFile;
+import velog.clone.domain.ImgFile;
 import velog.clone.domain.User;
-import velog.clone.repository.BlogRepository;
 import velog.clone.repository.UserRepository;
+import velog.clone.service.BlogService;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Slf4j
@@ -19,8 +25,7 @@ import java.util.Optional;
 public class CreateBlogController {
 
     private final UserRepository userRepository;
-    private final BlogRepository blogRepository;
-
+    private final BlogService blogService;
 
     @GetMapping("/{id}/createBlog")
     public String showCreateBlog(@PathVariable Long id, Model model) {
@@ -29,6 +34,7 @@ public class CreateBlogController {
         if (user.isPresent()) {
             model.addAttribute("user", user.get());
             model.addAttribute("blog", new Blog());
+            model.addAttribute("imgForm", new ImgForm());
 
             return "createBlog";
         } else {
@@ -37,18 +43,20 @@ public class CreateBlogController {
     }
 
     @PostMapping("/{id}/createBlog")
-    public String createBlog(@PathVariable Long id, @ModelAttribute Blog blog, RedirectAttributes attributes) {
+    public String createBlog(@PathVariable Long id, @ModelAttribute Blog blog, @ModelAttribute ImgForm imgForm, RedirectAttributes attributes) {
 
-        Optional<User> user = userRepository.findById(id);
+        try {
+            blogService.saveBlog(id, blog, imgForm.getAttachFile());
 
-        if (user.isPresent()) {
-            blog.setUser(user.get());
-            blogRepository.save(blog);
             attributes.addFlashAttribute("message", "블로그 생성 완료");
-            return "redirect:/";
-        } else {
-            attributes.addFlashAttribute("error", "사용자를 찾을 수 없습니다");
+
+            return "myPage";
+
+        } catch (IOException e) {
+            log.error("Failed to create blog", e);
+            attributes.addFlashAttribute("error", "블로그 생성 중 오류 발생");
             return "redirect:/";
         }
+
     }
 }

@@ -94,6 +94,8 @@
     </div>x
     <div th:if="${blog}">
         <a th:href="@{|/${user.id}/blogMain|}" class="logout-button">내 블로그</a>
+        <a th:href="@{|/${user.id}/myPage|}" class="logout-button">마이 페이지</a>
+
     </div>
     <div th:if="${!blog}">
         <a th:href="@{|/${user.id}/createBlog|}" class="logout-button">블로그 만들기</a>

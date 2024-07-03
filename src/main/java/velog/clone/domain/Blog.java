@@ -19,7 +19,10 @@ public class Blog {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    private String profileImg;
+    @OneToOne
+    @JoinColumn(name = "img_file_id")
+    private ImgFile profileImg;
+
     private String title;
 
     @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, orphanRemoval = true)
