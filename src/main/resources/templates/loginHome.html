@@ -106,7 +106,7 @@
         <a th:href="@{|/posts/${post.id}|}" class="post-title" th:text="${post.title}"></a>
         <p class="post-content" th:text="${#strings.abbreviate(post.content, 100)}"></p>
         <div class="post-meta">
-            <p>작성자 : <span th:text="${user.username}"></span></p>
+            <p>작성자 : <span th:text="${post.blog.user.username}"></span></p>
             <p>작성일시 : <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
         </div>
     </div>

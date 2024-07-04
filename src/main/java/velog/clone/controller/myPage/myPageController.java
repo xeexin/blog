@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import velog.clone.File.FileStore;
+import velog.clone.controller.Img.ImgForm;
 import velog.clone.domain.Blog;
 import velog.clone.domain.User;
 import velog.clone.repository.BlogRepository;

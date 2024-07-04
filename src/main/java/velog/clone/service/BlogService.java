@@ -1,6 +1,7 @@
 package velog.clone.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +18,7 @@ import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BlogService {
 
     private final UserRepository userRepository;
@@ -29,6 +31,7 @@ public class BlogService {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
+
 
         blog.setUser(user);
 
@@ -43,10 +46,13 @@ public class BlogService {
             blog.setProfileImg(imgFile);
         } else {
             // 기본 이미지 설정
-            UploadFile defaultUploadFile = new UploadFile("user.png", "user.png");
             ImgFile defaultImgFile = new ImgFile();
+            UploadFile defaultUploadFile = new UploadFile("user.png", "user.png");
+
             defaultImgFile.setAttachFile(defaultUploadFile);
+
             imgFileRepository.save(defaultImgFile);
+
             blog.setProfileImg(defaultImgFile);
         }
 

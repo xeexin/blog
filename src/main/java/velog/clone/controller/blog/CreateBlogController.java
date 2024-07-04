@@ -43,7 +43,7 @@ public class CreateBlogController {
     }
 
     @PostMapping("/{id}/createBlog")
-    public String createBlog(@PathVariable Long id, @ModelAttribute Blog blog, @ModelAttribute ImgForm imgForm, RedirectAttributes attributes) {
+    public String createBlog(@PathVariable("id") Long id, @ModelAttribute Blog blog, @ModelAttribute ImgForm imgForm, RedirectAttributes attributes) {
 
         try {
             blogService.saveBlog(id, blog, imgForm.getAttachFile());

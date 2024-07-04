@@ -45,6 +45,13 @@ public class UserService {
             imgFile.setAttachFile(uploadFile);
             imgFileRepository.save(imgFile);
             blog.setProfileImg(imgFile);
+        }else {
+            // 기본 이미지 설정
+            ImgFile defaultImgFile = new ImgFile();
+            UploadFile defaultUploadFile = new UploadFile("user.png", "user.png");
+            defaultImgFile.setAttachFile(defaultUploadFile);
+            imgFileRepository.save(defaultImgFile);
+            blog.setProfileImg(defaultImgFile);
         }
 
         userRepository.save(user);

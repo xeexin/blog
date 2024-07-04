@@ -15,17 +15,4 @@ import java.util.Optional;
 class LikeService {
     private final LikeRepository likeRepository;
 
-    public Long getLikeCnt(Long postId) {
-        return likeRepository.countByPostIdAndLikeItTrue(postId);
-    }
-
-//    public void likePost(Long postId, Long userId) {
-//        Likes like = likeRepository.findByPostIdAndUserId(postId, userId)
-//                .orElse(new Likes());
-//
-//        like.setPost(new Post(postId));
-//        like.setUser(new User(userId));
-//        like.setLikeIt(true);
-//        likeRepository.save(like);
-//    }
 }
