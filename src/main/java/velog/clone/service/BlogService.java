@@ -34,12 +34,20 @@ public class BlogService {
 
         if (!profileImgFile.isEmpty()) {
             ImgFile imgFile = new ImgFile();
+
             UploadFile uploadFile = fileStore.storeFile(profileImgFile);
+
             imgFile.setAttachFile(uploadFile);
             imgFileRepository.save(imgFile);
+
             blog.setProfileImg(imgFile);
         } else {
-            blog.setProfileImg(null);
+            // 기본 이미지 설정
+            UploadFile defaultUploadFile = new UploadFile("user.png", "user.png");
+            ImgFile defaultImgFile = new ImgFile();
+            defaultImgFile.setAttachFile(defaultUploadFile);
+            imgFileRepository.save(defaultImgFile);
+            blog.setProfileImg(defaultImgFile);
         }
 
         blogRepository.save(blog);

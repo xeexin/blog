@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Page</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap CSS from local static folder -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .profile-img {
             width: 150px;
@@ -27,7 +28,7 @@
     <div class="row">
         <div class="col-md-4 text-center">
             <img th:src="@{${blog.profileImg.attachFile.storeFileName}}" alt="Profile Image" class="profile-img">
-            <h2 th:text="${user.username}">Username</h2>
+            <h2 th:text="${blog.user.username}">Username</h2>
         </div>
         <div class="col-md-8 profile-info">
             <h3>개인 정보</h3>
@@ -35,14 +36,14 @@
                 <tbody>
                 <tr>
                     <th>Name:</th>
-                    <td th:text="${user.username}">Name</td>
+                    <td th:text="${blog.user.username}">Name</td>
                 </tr>
                 <tr>
                     <th>Email:</th>
-                    <td th:text="${user.email}">Email</td>
+                    <td th:text="${blog.user.email}">Email</td>
                 </tr>
                 <tr>
-                    <th>Blog Title:</th>
+                    <th>Title:</th>
                     <td th:text="${blog.title}">Blog Title</td>
                 </tr>
                 </tbody>
@@ -53,6 +54,7 @@
     </div>
 </div>
 
+<!-- Bootstrap JS from CDN -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
