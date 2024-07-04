@@ -10,32 +10,29 @@ import velog.clone.domain.Post;
 import velog.clone.domain.User;
 import velog.clone.repository.CommentRepository;
 import velog.clone.repository.PostRepository;
+import velog.clone.service.CommentService;
+import velog.clone.service.PostService;
 
 import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
 public class CommentController {
-    private final CommentRepository commentRepository;
-    private final PostRepository postRepository;
+
+    private final CommentService commentService;
+    private final PostService postService;
 
     @PostMapping("/posts/{postId}/comments")
     public String addComment(@PathVariable Long postId,@RequestParam String reply, Model model, @SessionAttribute(name = SessionConst.LOGIN_USER) User user ) {
 
-        Optional<Post> postOptional = postRepository.findById(postId);
-
-        if (!postOptional.isPresent()) {
-            model.addAttribute("error", "포스트가 없습니다.");
-            return "redirect:/";
-        }
+        Post post = postService.findByPostId(postId);
 
         Comment newComment = new Comment();
 
-        Post post = postOptional.get();
         newComment.setPost(post);
         newComment.setReply(reply);
         newComment.setUser(user);
-        commentRepository.save(newComment);
+        commentService.saveComment(newComment);
 
         model.addAttribute("post", post);
         model.addAttribute("newComment", newComment);

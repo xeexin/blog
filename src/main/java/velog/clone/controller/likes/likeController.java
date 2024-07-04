@@ -12,6 +12,8 @@ import velog.clone.domain.Post;
 import velog.clone.domain.User;
 import velog.clone.repository.LikeRepository;
 import velog.clone.repository.PostRepository;
+import velog.clone.service.LikeService;
+import velog.clone.service.PostService;
 
 import java.util.Optional;
 
@@ -19,8 +21,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class likeController {
 
-    private final PostRepository postRepository;
     private final LikeRepository likeRepository;
+    private final PostService postService;
 
     @PostMapping("/posts/{postId}/like")
     public String like(@PathVariable Long postId, Model model, @SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser) {
@@ -29,12 +31,8 @@ public class likeController {
             return "redirect:/login";
         }
 
-        Optional<Post> optionalPost = postRepository.findById(postId);
-        if (!optionalPost.isPresent()) {
-            return "redirect:/";
-        }
+        Post post = postService.findByPostId(postId);
 
-        Post post = optionalPost.get();
         Optional<Likes> optionalLike = likeRepository.findByPostAndUser(post, loginUser);
 
         if (optionalLike.isPresent()) {

@@ -11,6 +11,9 @@ import velog.clone.domain.User;
 import velog.clone.repository.BlogRepository;
 import velog.clone.repository.PostRepository;
 import velog.clone.repository.UserRepository;
+import velog.clone.service.BlogService;
+import velog.clone.service.PostService;
+import velog.clone.service.UserService;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +25,7 @@ public class myBlogMainController {
     private final UserRepository userRepository;
     private final BlogRepository blogRepository;
     private final PostRepository postRepository;
+
 
     @GetMapping("/{id}/blogMain")
     public String showMyBlogMain(@PathVariable("id") Long id, Model model) {

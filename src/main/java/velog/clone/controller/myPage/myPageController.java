@@ -15,6 +15,7 @@ import velog.clone.domain.Blog;
 import velog.clone.domain.User;
 import velog.clone.repository.BlogRepository;
 import velog.clone.repository.UserRepository;
+import velog.clone.service.BlogService;
 import velog.clone.service.UserService;
 
 import java.io.IOException;
@@ -28,29 +29,19 @@ public class myPageController {
     private final UserRepository userRepository;
     private final BlogRepository blogRepository;
     private final FileStore fileStore;
+
     private final UserService userService;
+    private final BlogService blogService;
+
 
     @GetMapping("/{id}/myPage")
     public String showMyPage(@PathVariable("id") Long id, Model model) {
-        Optional<User> optionalUser = userRepository.findById(id);
 
-        if (!optionalUser.isPresent()) {
-            model.addAttribute("error", "사용자를 찾을 수 없습니다.");
-            return "redirect:/";
-        }
+        User user = userService.findById(id);
+        Blog blog = blogService.findByUserId(user.getId());
 
-        User user = optionalUser.get();
-
-        Optional<Blog> optionalBlog = blogRepository.findByUserId(user.getId());
-        if (!optionalBlog.isPresent()) {
-            model.addAttribute("error", "블로그를 찾을 수 없습니다.");
-            return "redirect:/";
-        }
-
-        Blog blog = optionalBlog.get();
         model.addAttribute("user", user);
         model.addAttribute("blog", blog);
-
 
         return "myPage";
     }
@@ -63,24 +54,13 @@ public class myPageController {
 
     @GetMapping("/{id}/myPage/edit")
     public String formEditProfile(@PathVariable Long id, Model model) {
-        Optional<User> optionalUser = userRepository.findById(id);
 
-        if (!optionalUser.isPresent()) {
-            model.addAttribute("error", "사용자가 없습니다.");
-            return "redirect:/";
-        }
-
-        User user = optionalUser.get();
-        Optional<Blog> optionalBlog = blogRepository.findByUserId(user.getId());
-
-        if (!optionalBlog.isPresent()) {
-            model.addAttribute("error", "블로그가 없습니다.");
-            return "redirect:/";
-        }
-        Blog blog = optionalBlog.get();
+        User user = userService.findById(id);
+        Blog blog = blogService.findByUserId(user.getId());
 
         model.addAttribute("user", user);
         model.addAttribute("blog", blog);
+
         return "editProfile";
     }
 

@@ -15,6 +15,7 @@ import velog.clone.repository.ImgFileRepository;
 import velog.clone.repository.UserRepository;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,12 @@ public class BlogService {
     private final BlogRepository blogRepository;
     private final FileStore fileStore;
     private final ImgFileRepository imgFileRepository;
+
+
+    public Blog findByUserId(Long id) {
+        return blogRepository.findByUserId(id)
+                .orElseThrow(() -> new IllegalArgumentException("블로그를 찾을 수 없습니다."));
+    }
 
     @Transactional
     public void saveBlog(Long userId, Blog blog, MultipartFile profileImgFile) throws IOException {

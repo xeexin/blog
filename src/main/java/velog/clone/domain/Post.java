@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,7 +18,7 @@ public class Post {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="blog_id",nullable = false)
+    @JoinColumn(name = "blog_id", nullable = false)
     private Blog blog;
 
 
@@ -28,9 +29,9 @@ public class Post {
     @CreationTimestamp
     private LocalDateTime createdAt; // 생성일자
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likes;
 
-
-
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Tag> tags = new ArrayList<>();
 }

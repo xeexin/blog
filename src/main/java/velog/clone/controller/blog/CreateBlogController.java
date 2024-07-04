@@ -15,6 +15,7 @@ import velog.clone.domain.ImgFile;
 import velog.clone.domain.User;
 import velog.clone.repository.UserRepository;
 import velog.clone.service.BlogService;
+import velog.clone.service.UserService;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -26,20 +27,18 @@ public class CreateBlogController {
 
     private final UserRepository userRepository;
     private final BlogService blogService;
+    private final UserService userService;
 
     @GetMapping("/{id}/createBlog")
     public String showCreateBlog(@PathVariable Long id, Model model) {
 
-        Optional<User> user = userRepository.findById(id);
-        if (user.isPresent()) {
-            model.addAttribute("user", user.get());
-            model.addAttribute("blog", new Blog());
-            model.addAttribute("imgForm", new ImgForm());
+        User user = userService.findById(id);
 
-            return "createBlog";
-        } else {
-            return "redirect:/";
-        }
+        model.addAttribute("user", user);
+        model.addAttribute("blog", new Blog());
+        model.addAttribute("imgForm", new ImgForm());
+
+        return "createBlog";
     }
 
     @PostMapping("/{id}/createBlog")

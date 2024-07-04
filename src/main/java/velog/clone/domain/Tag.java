@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -16,6 +18,7 @@ public class Tag {
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
-    private String hashtag;
+
+    private String name;
 
 }
