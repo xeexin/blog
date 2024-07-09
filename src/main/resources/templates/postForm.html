@@ -1,25 +1,65 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Posting</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>포스팅</title>
     <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/styles.css}" href="../css/styles.css" rel="stylesheet">
     <style>
-        .container {
-            max-width: 720px;
-            margin: 20px auto;
+        .tag {
+            display: inline-block;
+            background-color: #e1e1e1;
+            border-radius: 4px;
+            padding: 5px 10px;
+            margin: 5px;
+            font-size: 14px;
         }
-        .btn {
-            margin-top: 10px;
+
+        .tag .remove-tag {
+            margin-left: 10px;
+            cursor: pointer;
+            color: red;
+        }
+
+        .form-container {
+            max-width: 480px;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 20px;
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            text-align: center;
+            color: #0052cc;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary {
+            background-color: #0052cc;
+            border-color: #0052cc;
+            font-size: 1rem;
+            padding: 0.75rem;
+            border-radius: 12px;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: #0041a8;
+            border-color: #0041a8;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>포스팅</h1>
+<div class="container form-container">
+    <h2 class="form-title">포스팅</h2>
     <form id="postForm" th:action="@{'/' + ${user.id} + '/writePost'}" th:object="${post}" method="post">
         <div class="form-group">
             <label for="title">포스트 제목</label>
@@ -30,13 +70,57 @@
             <textarea id="content" th:field="*{content}" class="form-control" rows="10" placeholder="포스트 내용을 입력하세요" required></textarea>
         </div>
         <div class="form-group">
+            <label for="tags">태그</label>
+            <input type="text" id="tagInput" class="form-control" placeholder="태그를 입력하고 엔터키를 누르세요">
+            <div id="tagContainer"></div>
+            <input type="hidden" id="tags" name="tags">
+        </div>
+        <div class="form-group">
             <button type="button" class="btn btn-secondary" onclick="saveDraft()">임시저장</button>
             <button type="submit" class="btn btn-primary">포스팅하기</button>
         </div>
     </form>
 </div>
 
-<script th:inline="javascript">
+<!-- Bootstrap JS from CDN -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    const tagInput = document.getElementById('tagInput');
+    const tagContainer = document.getElementById('tagContainer');
+    const tagsField = document.getElementById('tags');
+    let tags = [];
+
+    tagInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const tagText = tagInput.value.trim();
+            if (tagText && !tags.includes(tagText)) {
+                tags.push(tagText);
+                const tagElement = document.createElement('div');
+                tagElement.className = 'tag';
+                tagElement.textContent = `#${tagText}`;
+                const removeBtn = document.createElement('span');
+                removeBtn.className = 'remove-tag';
+                removeBtn.textContent = 'x';
+                removeBtn.addEventListener('click', function () {
+                    tagContainer.removeChild(tagElement);
+                    tags = tags.filter(t => t !== tagText);
+                    updateTagsField();
+                });
+                tagElement.appendChild(removeBtn);
+                tagContainer.appendChild(tagElement);
+                updateTagsField();
+            }
+            tagInput.value = '';
+        }
+    });
+
+    function updateTagsField() {
+        tagsField.value = tags.join(',');
+    }
+
     function saveDraft() {
         var userId = [[${user.id}]]; // user.id 값 삽입
         var form = document.getElementById('postForm');

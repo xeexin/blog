@@ -10,6 +10,7 @@ import velog.clone.repository.*;
 import velog.clone.service.*;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +41,7 @@ public class PostController {
     }
 
     @PostMapping("/{id}/writePost")
-    public String savePost(@PathVariable Long id, @ModelAttribute Post post, Model model) {
+    public String savePost(@PathVariable Long id, @ModelAttribute Post post, @RequestParam("tags") String tags, Model model) {
 
         User user = userService.findById(id);
         Blog blog = blogService.findByUserId(user.getId());
@@ -52,14 +53,36 @@ public class PostController {
         newPost.setCreatedAt(LocalDateTime.now());
         newPost.setContent(post.getContent());
         newPost.setTitle(post.getTitle());
+
         postService.savePost(newPost);
+
+        saveTags(tags, newPost);
 
         model.addAttribute("message", "포스팅 완료");
         return "redirect:/";
     }
 
+
     @PostMapping("/{id}/post/draft")
-    public String saveDraft( @ModelAttribute Post post, Model model) {
+    public String saveDraft( @PathVariable Long id, @ModelAttribute Post post, @RequestParam("tags") String tags, Model model) {
+
+        User user = userService.findById(id);
+        Blog blog = blogService.findByUserId(user.getId());
+
+        post.setBlog(blog);
+        post.setDraft(true);
+        post.setCreatedAt(LocalDateTime.now());
+        postService.savePost(post);
+
+        saveTags(tags, post);
+
+        List<String> tagList = Arrays.asList(tags.split(","));
+        for (String tagName : tagList) {
+            Tag tag = new Tag();
+            tag.setName(tagName.trim());
+            tag.setPost(post);
+            tagService.saveTag(tag);
+        }
 
         model.addAttribute("message", "임시저장 완료");
         return "redirect:/";
@@ -89,4 +112,23 @@ public class PostController {
         return "viewPost";
     }
 
+    private void saveTags(String tags, Post post) {
+        if (tags == null || tags.isEmpty()) {
+            return;
+        }
+        List<String> tagList = Arrays.asList(tags.split(","));
+        tagList.stream()
+                .map(String::trim)
+                .distinct()
+                .forEach(tagName -> {
+                    Tag tag = tagService.findByName(tagName)
+                            .orElseGet(() -> {
+                                Tag newTag = new Tag();
+                                newTag.setName(tagName);
+                                return tagService.saveTag(newTag);
+                            });
+                    tag.setPost(post);
+                    tagService.saveTag(tag);
+                });
+    }
 }

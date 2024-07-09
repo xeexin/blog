@@ -7,6 +7,7 @@ import velog.clone.domain.Tag;
 import velog.clone.repository.TagRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,4 +30,9 @@ public class TagService {
     public void deleteTag(Long id) {
         tagRepository.deleteById(id);
     }
+
+    public Optional<Tag> findByName(String name) {
+        return tagRepository.findByName(name);
+    }
+
 }
