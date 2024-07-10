@@ -41,7 +41,7 @@
 <body>
 <div class="container form-container">
     <h2 class="form-title">블로그 생성</h2>
-    <form th:action="@{|/${user.id}/createBlog|}" method="post" enctype="multipart/form-data">
+    <form th:action="@{|/@${user.username}/createBlog|}" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label for="username">사용자명</label>
             <input type="text" id="username" th:value="${user.username}" class="form-control" disabled>

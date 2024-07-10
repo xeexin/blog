@@ -22,10 +22,10 @@ public class CommentController {
     private final CommentService commentService;
     private final PostService postService;
 
-    @PostMapping("/posts/{postId}/comments")
-    public String addComment(@PathVariable Long postId,@RequestParam String reply, Model model, @SessionAttribute(name = SessionConst.LOGIN_USER) User user ) {
+    @PostMapping("/@{username}/posts/{postTitle}/comments")
+    public String addComment(@PathVariable String postTitle, @RequestParam String reply, Model model, @SessionAttribute(name = SessionConst.LOGIN_USER) User user ) {
 
-        Post post = postService.findByPostId(postId);
+        Post post = postService.findByPostTitle(postTitle);
 
         Comment newComment = new Comment();
 
@@ -36,6 +36,6 @@ public class CommentController {
 
         model.addAttribute("post", post);
         model.addAttribute("newComment", newComment);
-        return "redirect:/posts/{postId}";
+        return "redirect:/@{username}/posts/{postTitle}";
     }
 }

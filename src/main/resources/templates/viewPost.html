@@ -104,7 +104,7 @@
             <div th:each="tag : ${tags}" class="tag" th:text="${tag.name}">태그</div>
         </div>
         <div class="like-section">
-            <form th:action="@{|/posts/${post.id}/like|}" method="post">
+            <form th:action="@{|/@${post.blog.user.username}/posts/${post.title}/like|}" method="post">
                 <button type="submit" th:text="${likedByUser ? '♥' : '♡'}"></button>
             </form>
             <span th:text="'좋아요 ' + ${cntLike} + '개'"></span>
@@ -121,7 +121,7 @@
         </div>
         <div class="comment-form">
             <h3>댓글 작성</h3>
-            <form th:action="@{|/posts/${post.id}/comments|}" method="post">
+            <form th:action="@{|/@${post.blog.user.username}/posts/${post.title}/comments|}" method="post">
                 <div class="form-group">
                     <label for="reply">댓글</label>
                     <textarea id="reply" name="reply" class="form-control" placeholder="댓글을 입력하세요" required></textarea>

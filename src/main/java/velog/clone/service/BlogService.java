@@ -34,9 +34,9 @@ public class BlogService {
     }
 
     @Transactional
-    public void saveBlog(Long userId, Blog blog, MultipartFile profileImgFile) throws IOException {
+    public void saveBlog(String username, Blog blog, MultipartFile profileImgFile) throws IOException {
 
-        User user = userRepository.findById(userId)
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
 

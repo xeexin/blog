@@ -27,10 +27,10 @@ public class myBlogMainController {
     private final PostRepository postRepository;
 
 
-    @GetMapping("/{id}/blogMain")
-    public String showMyBlogMain(@PathVariable("id") Long id, Model model) {
+    @GetMapping("/@{username}/blogMain")
+    public String showMyBlogMain(@PathVariable("username") String username, Model model) {
 
-        Optional<User> user = userRepository.findById(id);
+        Optional<User> user = userRepository.findByUsername(username);
 
         if (user.isPresent()) {
             User existUser = user.get();

@@ -60,7 +60,8 @@
 <body>
 <div class="container form-container">
     <h2 class="form-title">포스팅</h2>
-    <form id="postForm" th:action="@{'/' + ${user.id} + '/writePost'}" th:object="${postDTO}" method="post">
+
+    <form id="postForm" th:action="@{|/@${user.username}/writePost|}" th:object="${postDTO}" method="post">
         <div class="form-group">
             <label for="title">포스트 제목</label>
             <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="포스트 제목을 입력하세요" required>

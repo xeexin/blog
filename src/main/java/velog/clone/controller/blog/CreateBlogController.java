@@ -29,10 +29,10 @@ public class CreateBlogController {
     private final BlogService blogService;
     private final UserService userService;
 
-    @GetMapping("/{id}/createBlog")
-    public String showCreateBlog(@PathVariable Long id, Model model) {
+    @GetMapping("/@{username}/createBlog")
+    public String showCreateBlog(@PathVariable String username, Model model) {
 
-        User user = userService.findById(id);
+        User user = userService.findByUsername(username);
 
         model.addAttribute("user", user);
         model.addAttribute("blog", new Blog());
@@ -41,11 +41,11 @@ public class CreateBlogController {
         return "createBlog";
     }
 
-    @PostMapping("/{id}/createBlog")
-    public String createBlog(@PathVariable("id") Long id, @ModelAttribute Blog blog, @ModelAttribute ImgForm imgForm, RedirectAttributes attributes) {
+    @PostMapping("/@{username}/createBlog")
+    public String createBlog(@PathVariable("username") String username, @ModelAttribute Blog blog, @ModelAttribute ImgForm imgForm, RedirectAttributes attributes) {
 
         try {
-            blogService.saveBlog(id, blog, imgForm.getAttachFile());
+            blogService.saveBlog(username, blog, imgForm.getAttachFile());
 
             attributes.addFlashAttribute("message", "블로그 생성 완료");
 

@@ -15,6 +15,8 @@ import velog.clone.repository.PostRepository;
 import velog.clone.service.LikeService;
 import velog.clone.service.PostService;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @Controller
@@ -24,14 +26,14 @@ public class likeController {
     private final LikeRepository likeRepository;
     private final PostService postService;
 
-    @PostMapping("/posts/{postId}/like")
-    public String like(@PathVariable Long postId, Model model, @SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser) {
+    @PostMapping("/@{username}/posts/{postTitle}/like")
+    public String like(@PathVariable String username, @PathVariable String postTitle, @SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser) {
 
         if (loginUser == null) {
             return "redirect:/login";
         }
 
-        Post post = postService.findByPostId(postId);
+        Post post = postService.findByPostTitle(postTitle);
 
         Optional<Likes> optionalLike = likeRepository.findByPostAndUser(post, loginUser);
 
@@ -44,8 +46,8 @@ public class likeController {
             likes.setLikeIt(true);
             likeRepository.save(likes);
         }
-
-        return "redirect:/posts/{postId}";
+        String encodedPostTitle = URLEncoder.encode(postTitle, StandardCharsets.UTF_8);
+        return "redirect:/@" + username + "/posts/" + encodedPostTitle;
     }
 
 }

@@ -91,7 +91,7 @@
         <a th:href="@{/logout}" class="logout-button">로그아웃</a>
     </div>
     <div th:if="${blog != null}">
-        <a th:href="@{|/${user.id}/writePost|}" class="logout-button">글 쓰기</a>
+        <a th:href="@{|/@${user.username}/writePost|}" class="logout-button">글 쓰기</a>
     </div>
 
     <div th:if="${blog == null}">
@@ -100,7 +100,7 @@
 
 </div>
 <div th:each="post : ${posts}" class="post">
-    <a th:href="@{|/posts/${post.id}|}" class="post-title" th:text="${post.title}"></a>
+    <a th:href="@{|/@${blog.user.username}/posts/${post.title}|}" class="post-title" th:text="${post.title}"></a>
     <p class="post-content" th:text="${#strings.abbreviate(post.content, 100)}"></p>
     <div class="post-meta">
         <p>작성자 : <span th:text="${user.username}"></span></p>

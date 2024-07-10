@@ -39,6 +39,11 @@ public class PostService {
                 .orElseThrow(() -> new IllegalArgumentException("포스트를 찾을 수 없습니다."));
     }
 
+    public Post findByPostTitle(String postTitle) {
+        return postRepository.findByTitle(postTitle)
+                .orElseThrow(() -> new IllegalArgumentException("포스트를 찾을 수 없습니다."));
+    }
+
     public List<Post> findAllPosts() {
         return postRepository.findAll();
     }

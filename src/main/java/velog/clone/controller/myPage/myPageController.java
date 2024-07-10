@@ -34,10 +34,10 @@ public class myPageController {
     private final BlogService blogService;
 
 
-    @GetMapping("/{id}/myPage")
-    public String showMyPage(@PathVariable("id") Long id, Model model) {
+    @GetMapping("/@{username}/myPage")
+    public String showMyPage(@PathVariable("username") String username, Model model) {
 
-        User user = userService.findById(id);
+        User user = userService.findByUsername(username);
         Blog blog = blogService.findByUserId(user.getId());
 
         model.addAttribute("user", user);
@@ -52,10 +52,10 @@ public class myPageController {
         return new UrlResource("file:" + fileStore.getFullPath(filename));
     }
 
-    @GetMapping("/{id}/myPage/edit")
-    public String formEditProfile(@PathVariable Long id, Model model) {
+    @GetMapping("/@{username}/myPage/edit")
+    public String formEditProfile(@PathVariable String username, Model model) {
 
-        User user = userService.findById(id);
+        User user = userService.findByUsername(username);
         Blog blog = blogService.findByUserId(user.getId());
 
         model.addAttribute("user", user);
@@ -64,18 +64,20 @@ public class myPageController {
         return "editProfile";
     }
 
-    @PostMapping ("/{id}/myPage/edit")
-    public String EditProfile(@PathVariable Long id, @RequestParam("username") String username,
+    @PostMapping ("/@{username}/myPage/edit")
+    public String EditProfile(@RequestParam("username") String username,
                               @RequestParam("title") String title,
                               @RequestParam("profileImg") MultipartFile profileImg, RedirectAttributes attributes) {
+        User user = userService.findByUsername(username);
+
         try {
-            userService.updateUserProfile(id, username, title, profileImg);
+            userService.updateUserProfile(user.getId(), username, title, profileImg);
             attributes.addFlashAttribute("message", "프로필이 성공적으로 업데이트되었습니다.");
         } catch (IOException e) {
             attributes.addFlashAttribute("error", "프로필 업데이트 중 오류가 발생했습니다.");
             return "redirect:/{id}/myPage/edit";
         }
 
-        return "redirect:/{id}/myPage";
+        return "redirect:/@{username}/myPage";
     }
 }

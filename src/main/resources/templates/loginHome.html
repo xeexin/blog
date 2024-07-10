@@ -93,17 +93,17 @@
         <a th:href="@{/logout}" class="logout-button">로그아웃</a>
     </div>x
     <div th:if="${blog}">
-        <a th:href="@{|/${user.id}/blogMain|}" class="logout-button">내 블로그</a>
-        <a th:href="@{|/${user.id}/myPage|}" class="logout-button">마이 페이지</a>
+        <a th:href="@{|/@${user.username}/blogMain|}" class="logout-button">내 블로그</a>
+        <a th:href="@{|/@${user.username}/myPage|}" class="logout-button">마이 페이지</a>
 
     </div>
     <div th:if="${!blog}">
-        <a th:href="@{|/${user.id}/createBlog|}" class="logout-button">블로그 만들기</a>
+        <a th:href="@{|/@${user.username}/createBlog|}" class="logout-button">블로그 만들기</a>
     </div>
 </div>
 <main class="blog-container">
     <div th:each="post : ${posts}" class="post">
-        <a th:href="@{|/posts/${post.id}|}" class="post-title" th:text="${post.title}"></a>
+        <a th:href="@{|@${post.blog.user.username}/posts/${post.title}|}" class="post-title" th:text="${post.title}"></a>
         <p class="post-content" th:text="${#strings.abbreviate(post.content, 100)}"></p>
         <div class="post-meta">
             <p>작성자 : <span th:text="${post.blog.user.username}"></span></p>

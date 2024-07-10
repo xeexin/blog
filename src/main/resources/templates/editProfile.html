@@ -123,7 +123,7 @@
 <body>
 <div class="container form-container">
   <h2 class="form-title">프로필 수정</h2>
-  <form th:action="@{|/${user.id}/myPage/edit|}" method="post" enctype="multipart/form-data">
+  <form th:action="@{|/@${user.username}/myPage/edit|}" method="post" enctype="multipart/form-data">
     <div class="form-group text-center">
       <img id="profileImgPreview" th:src="@{${blog.profileImg != null ? '/uploads/' + blog.profileImg.attachFile.storeFileName : '/files/user.png'}}" alt="Profile Image" class="profile-img">
       <input type="file" id="profileImg" name="profileImg" class="form-control-file mt-2">

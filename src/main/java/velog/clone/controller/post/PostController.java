@@ -11,6 +11,8 @@ import velog.clone.dto.PostDTO;
 import velog.clone.repository.*;
 import velog.clone.service.*;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,34 +34,33 @@ public class PostController {
 
 
     //글 쓰기
-    @GetMapping("/{id}/writePost")
-    public String showPostForm(@PathVariable Long id, Model model) {
+    @GetMapping("/@{username}/writePost")
+    public String showPostForm(@PathVariable String username, Model model) {
 
-        User user = userService.findById(id);
+        User user = userService.findByUsername(username);
         Blog blog = blogService.findByUserId(user.getId());
 
         model.addAttribute("user", user);
         model.addAttribute("blog",blog);
-//        model.addAttribute("post", new Post());
         model.addAttribute("postDTO", new PostDTO());
 
         return "postForm";
     }
 
-    @PostMapping("/{id}/writePost")
-    public String savePost(@PathVariable Long id, @ModelAttribute PostDTO postDTO, Model model) {
-        return savePostInternal(id, postDTO, false, model);    }
+    @PostMapping("/@{username}/writePost")
+    public String savePost(@PathVariable String username, @ModelAttribute PostDTO postDTO, Model model) {
+        return savePostInternal(username, postDTO, false, model);    }
 
-    @PostMapping("/{id}/post/draft")
-    public String saveDraft(@PathVariable Long id, @ModelAttribute PostDTO postDTO, Model model) {
-        return savePostInternal(id, postDTO, true, model);
+    @PostMapping("/@{username}/post/draft")
+    public String saveDraft(@PathVariable String username, @ModelAttribute PostDTO postDTO, Model model) {
+        return savePostInternal(username, postDTO, true, model);
     }
 
-    @GetMapping("/posts/{postId}")
-    public String viewPost(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser, @PathVariable Long postId, Model model) {
+    @GetMapping("/@{username}/posts/{postTitle}")
+    public String viewPost(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser, @PathVariable String postTitle, Model model) {
 
-        Post post = postService.findByPostId(postId);
-        List<Comment> comments = commentService.findByPostId(postId);
+        Post post = postService.findByPostTitle(postTitle);
+        List<Comment> comments = commentService.findByPostId(post.getId());
         List<Tag> tags = post.getTags(); // 태그 목록을 가져옵니다.
 
 
@@ -70,7 +71,7 @@ public class PostController {
             Optional<Likes> like = likeRepository.findByPostAndUser(post, loginUser);
             likedByUser = like.isPresent();
 
-            cntLike = likeRepository.countByPostIdAndLikeItTrue(postId);
+            cntLike = likeRepository.countByPostTitleAndLikeItTrue(postTitle);
         }
 
         model.addAttribute("post", post);
@@ -84,8 +85,8 @@ public class PostController {
     }
 
 
-    private String savePostInternal(Long id, PostDTO postDTO, boolean isDraft, Model model) {
-        User user = userService.findById(id);
+    private String savePostInternal(String username, PostDTO postDTO, boolean isDraft, Model model) {
+        User user = userService.findByUsername(username );
         Blog blog = blogService.findByUserId(user.getId());
 
         Post post = postService.convertToEntity(postDTO, blog);
@@ -96,8 +97,10 @@ public class PostController {
 
         saveTags(postDTO.getTags(), post);
 
+        String encodedPostTitle = URLEncoder.encode(post.getTitle(), StandardCharsets.UTF_8);
+
         model.addAttribute("message", isDraft ? "임시저장 완료" : "포스팅 완료");
-        return "redirect:/";
+        return "redirect:/@" + username + "/posts/" + encodedPostTitle;
     }
 
     private void saveTags(String tags, Post post) {

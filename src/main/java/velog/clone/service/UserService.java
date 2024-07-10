@@ -23,6 +23,11 @@ public class UserService {
     private final FileStore fileStore;
     private final ImgFileRepository imgFileRepository;
 
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundExeption("User not found"));
+    }
+
     @Transactional
     public User findById(Long id) {
         return userRepository.findById(id)
