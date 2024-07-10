@@ -48,37 +48,11 @@ public class PostController {
 
     @PostMapping("/{id}/writePost")
     public String savePost(@PathVariable Long id, @ModelAttribute PostDTO postDTO, Model model) {
-        User user = userService.findById(id);
-        Blog blog = blogService.findByUserId(user.getId());
-
-        Post post = postService.convertToEntity(postDTO, blog);
-        postService.savePost(post);
-
-        saveTags(postDTO.getTags(), post);
-
-        model.addAttribute("message", "포스팅 완료");
-        return "redirect:/";
-    }
+        return savePostInternal(id, postDTO, false, model);    }
 
     @PostMapping("/{id}/post/draft")
-    public String saveDraft( @PathVariable Long id, @ModelAttribute Post post, @RequestParam("tags") String tags, Model model) {
-
-        User user = userService.findById(id);
-        Blog blog = blogService.findByUserId(user.getId());
-
-        post.setBlog(blog);
-        post.setDraft(true);
-        post.setCreatedAt(LocalDateTime.now());
-        post.setTitle(post.getTitle());
-        post.setContent(post.getContent());
-
-        postService.savePost(post);
-
-        saveTags(tags, post);
-
-
-        model.addAttribute("message", "임시저장 완료");
-        return "redirect:/";
+    public String saveDraft(@PathVariable Long id, @ModelAttribute PostDTO postDTO, Model model) {
+        return savePostInternal(id, postDTO, true, model);
     }
 
     @GetMapping("/posts/{postId}")
@@ -107,6 +81,23 @@ public class PostController {
         model.addAttribute("tags", tags); // 태그 목록을 모델에 추가합니다.
 
         return "viewPost";
+    }
+
+
+    private String savePostInternal(Long id, PostDTO postDTO, boolean isDraft, Model model) {
+        User user = userService.findById(id);
+        Blog blog = blogService.findByUserId(user.getId());
+
+        Post post = postService.convertToEntity(postDTO, blog);
+        post.setDraft(isDraft);
+        post.setCreatedAt(LocalDateTime.now());
+
+        postService.savePost(post);
+
+        saveTags(postDTO.getTags(), post);
+
+        model.addAttribute("message", isDraft ? "임시저장 완료" : "포스팅 완료");
+        return "redirect:/";
     }
 
     private void saveTags(String tags, Post post) {
