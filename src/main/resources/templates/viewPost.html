@@ -76,6 +76,18 @@
             color: red;
             cursor: pointer;
         }
+        .tags-section {
+            margin-top: 20px;
+        }
+        .tag {
+            display: inline-block;
+            background-color: #f1f1f1;
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 15px;
+            margin-right: 5px;
+            font-size: 0.875rem;
+        }
     </style>
 </head>
 <body>
@@ -86,6 +98,10 @@
         <div class="post-meta">
             <p>작성자: <span th:text="${post.blog.user.username}"></span></p>
             <p>작성일시 : <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}">작성일시</span></p>
+        </div>
+        <div class="tags-section">
+            <h4>태그:</h4>
+            <div th:each="tag : ${tags}" class="tag" th:text="${tag.name}">태그</div>
         </div>
         <div class="like-section">
             <form th:action="@{|/posts/${post.id}/like|}" method="post">

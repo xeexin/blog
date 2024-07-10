@@ -3,6 +3,7 @@ package velog.clone.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import velog.clone.domain.Post;
 import velog.clone.domain.Tag;
 import velog.clone.repository.TagRepository;
 
@@ -15,7 +16,8 @@ public class TagService {
     private final TagRepository tagRepository;
 
     @Transactional
-    public Tag saveTag(Tag tag) {
+    public Tag saveTag(Tag tag, Post post) {
+        tag.setPost(post);
         return tagRepository.save(tag);
     }
 
