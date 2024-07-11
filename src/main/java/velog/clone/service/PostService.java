@@ -123,6 +123,9 @@ public class PostService {
         return postRepository.findByBlogIdAndDraftFalse(blogId);
     }
 
+    public List<Post> findByBlogAndDraftTrue(Long blodId) {
+        return postRepository.findByBlogIdAndDraftTrue(blodId);
+    }
 
     public List<Post> findPublishedPostsByBlogId(Long blogId) {
         return postRepository.findByBlogIdAndDraftFalse(blogId);

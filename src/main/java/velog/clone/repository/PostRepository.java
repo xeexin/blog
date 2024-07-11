@@ -21,5 +21,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findByBlogIdAndDraftFalse(Long blogId);
 
+    List<Post> findByBlogIdAndDraftTrue(Long blogId);
+
     List<Post> findByDraftFalse();
+
 }

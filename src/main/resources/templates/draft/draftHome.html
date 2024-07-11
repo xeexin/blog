@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>임시저장</title>
+    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/styles.css}" href="../css/styles.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .draft-item {
+            background-color: white;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .draft-item h3 {
+            margin-top: 0;
+        }
+
+        .draft-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background-color: #e1e1e1;
+            border-radius: 4px;
+            padding: 5px 10px;
+            margin: 5px;
+            font-size: 14px;
+        }
+    </style>
+
+</head>
+<body>
+<div class="container">
+    <h2>임시 저장 목록</h2>
+    <div th:if="${#lists.isEmpty(draftTrue)}">
+        <p>임시 저장된 글이 없습니다.</p>
+    </div>
+    <div th:each="draft : ${draftTrue}" class="draft-item">
+        <h3 th:text="${draft.title}">제목</h3>
+        <p th:text="${draft.content}">내용</p>
+        <p>작성자: <span th:text="${user.username}">작성자 이름</span></p>
+        <p>저장 시간: <span th:text="${#temporals.format(draft.createdAt, 'yyyy-MM-dd HH:mm')}">저장 시간</span></p>
+        <div class="tags">
+            <span th:each="tag : ${draft.tags}" class="tag" th:text="'#' + ${tag.name}">#태그</span>
+        </div>
+        <div class="draft-buttons">
+            <a th:href="@{|/@${user.username}/editPost/${draft.title}|}" class="btn btn-primary">수정하기</a>
+            <a th:href="@{|/@${user.username}/blogMain|}" class="btn btn-secondary">뒤로가기</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
