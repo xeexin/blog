@@ -18,4 +18,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Comment save(Comment comment);
 
     Optional<Post> findByTitleAndBlogUser(String postTitle, User user);
+
+    List<Post> findByBlogIdAndDraftFalse(Long blogId);
+
+    List<Post> findByDraftFalse();
 }

@@ -25,6 +25,7 @@ public class myBlogMainController {
     private final UserRepository userRepository;
     private final BlogRepository blogRepository;
     private final PostRepository postRepository;
+    private final PostService postService;
 
 
     @GetMapping("/@{username}/blogMain")
@@ -41,7 +42,10 @@ public class myBlogMainController {
 
                 model.addAttribute("blog", blogUser.get());
 
-                List<Post> posts = postRepository.findByBlogId(blogUser.get().getId());
+                List<Post> posts = postService.findByBlogAndDraftFalse(user.get().getBlog().getId());
+
+//                List<Post> posts = postRepository.findByBlogId(blogUser.get().getId());
+
                 model.addAttribute("posts", posts);
 
                 return "/myBlogMain";

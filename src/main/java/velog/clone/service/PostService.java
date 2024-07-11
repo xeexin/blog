@@ -118,4 +118,17 @@ public class PostService {
 
         postRepository.save(post);
     }
+
+    public List<Post> findByBlogAndDraftFalse(Long blogId) {
+        return postRepository.findByBlogIdAndDraftFalse(blogId);
+    }
+
+
+    public List<Post> findPublishedPostsByBlogId(Long blogId) {
+        return postRepository.findByBlogIdAndDraftFalse(blogId);
+    }
+
+    public List<Post> findAllPublishedPosts() {
+        return postRepository.findByDraftFalse();
+    }
 }

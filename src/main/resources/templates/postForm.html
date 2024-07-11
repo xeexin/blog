@@ -123,9 +123,9 @@
     }
 
     function saveDraft() {
-        var userId = [[${user.id}]]; // user.id 값 삽입
+        var userName = '[[${user.username}]]';
         var form = document.getElementById('postForm');
-        form.action = '/' + userId + '/post/draft';
+        form.action = '/@' + encodeURIComponent(userName) + '/post/draft';
         form.method = 'post';
         form.submit();
     }

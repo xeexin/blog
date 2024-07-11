@@ -16,6 +16,7 @@ import velog.clone.domain.User;
 import velog.clone.repository.BlogRepository;
 import velog.clone.repository.PostRepository;
 import velog.clone.repository.UserRepository;
+import velog.clone.service.PostService;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +25,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class HomeController {
     private final BlogRepository blogRepository;
-    private final PostRepository postRepository;
+    private final PostService postService;
 
     @GetMapping("/")
     public String HomeLogin(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser, Model model) {
@@ -36,17 +37,17 @@ public class HomeController {
         model.addAttribute("user", loginUser);
 
         Optional<Blog> userBlog = blogRepository.findByUserId(loginUser.getId());
+
         if (userBlog.isPresent()) {
 
             model.addAttribute("blog", true);
 
-            // 모든 포스팅 글 받기
-            List<Post> posts = postRepository.findAll();
-            model.addAttribute("posts", posts);
-
         } else {
             model.addAttribute("blog", false);
         }
+
+        List<Post> allPublishedPosts = postService.findAllPublishedPosts();
+        model.addAttribute("posts", allPublishedPosts);
 
         return "loginHome";
     }

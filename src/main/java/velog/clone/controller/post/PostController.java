@@ -154,8 +154,7 @@ public class PostController {
         saveTags(postDTO.getTags(), post);
 
         // URL 인코딩 처리
-        String encodedUsername = UriComponentsBuilder.newInstance()
-                .pathSegment(username)
+        String encodedUsername = UriComponentsBuilder.fromPath(username)
                 .build()
                 .encode()
                 .toUriString();
@@ -168,6 +167,10 @@ public class PostController {
                 .toUriString();
 
         model.addAttribute("message", isDraft ? "임시저장 완료" : "포스팅 완료");
+
+        if (isDraft) {
+            return "redirect:/@" + encodedUsername + "/blogMain";
+        }
         return "redirect:/@" + encodedUsername + "/post" + encodedPostTitle;
     }
 
