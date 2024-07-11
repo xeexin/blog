@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.util.UriComponentsBuilder;
 import velog.clone.Const.SessionConst;
 import velog.clone.domain.Likes;
 import velog.clone.domain.Post;
@@ -46,8 +47,20 @@ public class likeController {
             likes.setLikeIt(true);
             likeRepository.save(likes);
         }
-        String encodedPostTitle = URLEncoder.encode(postTitle, StandardCharsets.UTF_8);
-        return "redirect:/@" + username + "/post/" + encodedPostTitle;
+
+        String encodedUsername = UriComponentsBuilder.fromPath(username)
+                .build()
+                .encode()
+                .toUriString();
+
+
+        String encodedPostTitle = UriComponentsBuilder.newInstance()
+                .pathSegment(post.getTitle())
+                .build()
+                .encode()
+                .toUriString();
+
+        return "redirect:/@" + encodedUsername + "/post" + encodedPostTitle;
     }
 
 }
