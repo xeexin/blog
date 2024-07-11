@@ -29,3 +29,7 @@ spring:
 file:
   dir: /Users/heejin/Desktop/portfolio/velog/src/main/resources/files/
 
+server:
+  tomcat:
+    uri-encoding: UTF-8
+    use-relative-redirects: true

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 import velog.clone.Const.SessionConst;
 import velog.clone.domain.*;
 import velog.clone.dto.PostDTO;
@@ -56,13 +57,12 @@ public class PostController {
         return savePostInternal(username, postDTO, true, model);
     }
 
-    @GetMapping("/@{username}/posts/{postTitle}")
+    @GetMapping("/@{username}/post/{postTitle}")
     public String viewPost(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser, @PathVariable String postTitle, Model model) {
 
         Post post = postService.findByPostTitle(postTitle);
         List<Comment> comments = commentService.findByPostId(post.getId());
         List<Tag> tags = post.getTags(); // 태그 목록을 가져옵니다.
-
 
         boolean likedByUser = false;
         Long cntLike = null;
@@ -84,9 +84,65 @@ public class PostController {
         return "viewPost";
     }
 
+    @GetMapping("/@{username}/post/{postTitle}/edit")
+    public String editPostForm(@PathVariable String username, @PathVariable String postTitle, Model model) {
+        User user = userService.findByUsername(username);
+        Post post = postService.findByPostTitle(postTitle);
+        PostDTO postDTO = postService.convertToDTO(post);
+
+//        List<Tag> tags = post.getTags(); // 태그 목록을 가져옵니다.
+
+
+        model.addAttribute("user", user);
+        model.addAttribute("post", post);
+        model.addAttribute("postDTO", postDTO);
+//        model.addAttribute("tags", tags);
+
+        return "editPostForm";
+    }
+
+    @PostMapping("/@{username}/post/{postTitle}/edit")
+    public String editPost(@PathVariable String username, @PathVariable String postTitle, @ModelAttribute PostDTO postDTO, Model model) {
+        Post post = postService.findByPostTitle(postTitle);
+
+        postService.updatePost(post.getId(), postDTO);
+
+        // 새 태그 목록으로 업데이트
+//        postService.updateTags(post.getId(), postDTO.getTags());
+
+        String newPostTitle = postDTO.getTitle();
+
+        String encodedUsername = UriComponentsBuilder.fromPath(username)
+                .build()
+                .encode()
+                .toUriString();
+
+        String encodedPostTitle = UriComponentsBuilder.newInstance()
+                .pathSegment(newPostTitle)
+                .build()
+                .encode()
+                .toUriString();
+
+        return "redirect:/@" + encodedUsername + "/post" + encodedPostTitle;
+    }
+
+    @PostMapping("/@{username}/post/{postTitle}/delete")
+    public String deletePost(@PathVariable String username, @PathVariable String postTitle) {
+        User user = userService.findByUsername(username);
+        Post post = postService.findByPostTitleAndUser(postTitle, user);
+
+        String encodedUsername = UriComponentsBuilder.fromPath(username)
+                .build()
+                .encode()
+                .toUriString();
+
+        postService.deletePost(post.getId());
+        return "redirect:/@" + encodedUsername + "/blogMain";
+    }
+
 
     private String savePostInternal(String username, PostDTO postDTO, boolean isDraft, Model model) {
-        User user = userService.findByUsername(username );
+        User user = userService.findByUsername(username);
         Blog blog = blogService.findByUserId(user.getId());
 
         Post post = postService.convertToEntity(postDTO, blog);
@@ -97,10 +153,22 @@ public class PostController {
 
         saveTags(postDTO.getTags(), post);
 
-        String encodedPostTitle = URLEncoder.encode(post.getTitle(), StandardCharsets.UTF_8);
+        // URL 인코딩 처리
+        String encodedUsername = UriComponentsBuilder.newInstance()
+                .pathSegment(username)
+                .build()
+                .encode()
+                .toUriString();
+
+
+        String encodedPostTitle = UriComponentsBuilder.newInstance()
+                .pathSegment(post.getTitle())
+                .build()
+                .encode()
+                .toUriString();
 
         model.addAttribute("message", isDraft ? "임시저장 완료" : "포스팅 완료");
-        return "redirect:/@" + username + "/posts/" + encodedPostTitle;
+        return "redirect:/@" + encodedUsername + "/post" + encodedPostTitle;
     }
 
     private void saveTags(String tags, Post post) {
@@ -114,10 +182,11 @@ public class PostController {
                 .map(String::trim)
                 .distinct()
                 .forEach(tagName -> {
+                    String finalTagName = tagName;
                     Tag tag = tagService.findByName(tagName)
                             .orElseGet(() -> {
                                 Tag newTag = new Tag();
-                                newTag.setName(tagName);
+                                newTag.setName(finalTagName);
                                 return tagService.saveTag(newTag,post);
                             });
                     tag.setPost(post);

@@ -17,8 +17,11 @@ public class Tag {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
-
-
     private String name;
+
+    public Tag() {}
+    public Tag(String name) {
+        this.name = name;
+    }
 
 }

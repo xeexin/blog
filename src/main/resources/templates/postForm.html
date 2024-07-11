@@ -104,7 +104,7 @@
                 tagElement.textContent = `#${tagText}`;
                 const removeBtn = document.createElement('span');
                 removeBtn.className = 'remove-tag';
-                removeBtn.textContent = 'x';
+                removeBtn.textContent = '❌';
                 removeBtn.addEventListener('click', function () {
                     tagContainer.removeChild(tagElement);
                     tags = tags.filter(t => t !== tagText);

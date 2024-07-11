@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import velog.clone.domain.Comment;
 import velog.clone.domain.Post;
+import velog.clone.domain.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,4 +17,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Comment save(Comment comment);
 
+    Optional<Post> findByTitleAndBlogUser(String postTitle, User user);
 }

@@ -30,8 +30,18 @@ public class Post {
     private LocalDateTime createdAt; // 생성일자
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Likes> likes;
+    private List<Likes> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tag> tags = new ArrayList<>();
+
+    public void addTag(Tag tag) {
+        tags.add(tag);
+        tag.setPost(this);
+    }
+
+    public void removeTag(Tag tag) {
+        tags.remove(tag);
+        tag.setPost(null);
+    }
 }

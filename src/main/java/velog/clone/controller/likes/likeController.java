@@ -26,7 +26,7 @@ public class likeController {
     private final LikeRepository likeRepository;
     private final PostService postService;
 
-    @PostMapping("/@{username}/posts/{postTitle}/like")
+    @PostMapping("/@{username}/post/{postTitle}/like")
     public String like(@PathVariable String username, @PathVariable String postTitle, @SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser) {
 
         if (loginUser == null) {
@@ -47,7 +47,7 @@ public class likeController {
             likeRepository.save(likes);
         }
         String encodedPostTitle = URLEncoder.encode(postTitle, StandardCharsets.UTF_8);
-        return "redirect:/@" + username + "/posts/" + encodedPostTitle;
+        return "redirect:/@" + username + "/post/" + encodedPostTitle;
     }
 
 }
