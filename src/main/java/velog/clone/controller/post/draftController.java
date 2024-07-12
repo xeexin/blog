@@ -103,8 +103,10 @@ public class draftController {
 
         Post post = postService.findByBlogAndTitle(blog, draftTitle);
 
+        log.info("DELETE :::: ");
+
         if (post != null && post.isDraft()) {
-            postService.deletePost(post);
+            postService.deletePost(post.getId());
         }
 
         // URL 인코딩 처리

@@ -33,6 +33,21 @@
             border-color: #0041a8;
         }
 
+        .btn-danger {
+            background-color: #cc0000;
+            border-color: #cc0000;
+            font-size: 1rem;
+            padding: 0.75rem;
+            border-radius: 12px;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .btn-danger:hover {
+            background-color: #a80000;
+            border-color: #a80000;
+        }
+
         .tag {
             display: inline-block;
             background-color: #e1e1e1;
@@ -74,7 +89,11 @@
         <input type="hidden" id="tags" th:field="*{tags}" name="tags">
         <div class="form-group">
             <button type="submit" class="btn btn-primary">바로 출간하기</button>
-            <button type="button" class="btn btn-danger" onclick="deleteDraft()">임시글 삭제하기</button>
+        </div>
+    </form>
+    <form th:action="@{|/@${user.username}/deleteDraft/${post.title}|}" method="post">
+        <div class="form-group">
+            <button type="submit" class="btn btn-danger">임시글 삭제하기</button>
         </div>
     </form>
 </div>
@@ -118,32 +137,5 @@
 
         updateHiddenTagField();
     });
-
-    const username = /*[[${user.username}]]*/ 'user';
-    const draftTitle = /*[[${post.title}]]*/ 'draftTitle';
-
-    function deleteDraft() {
-        if (confirm("임시저장 글을 삭제하시겠습니까?")) {
-            fetch(`/@${username}/deleteDraft/${draftTitle}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({})
-            })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.href = `/@${username}/blogMain`;
-                    } else {
-                        alert('임시글 삭제에 실패했습니다.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('임시글 삭제 중 오류가 발생했습니다.');
-                });
-        }
-    }
-
 </script>
 </html>
