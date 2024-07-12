@@ -99,9 +99,11 @@
             const tagText = tagInput.value.trim();
             if (tagText && !tags.includes(tagText)) {
                 tags.push(tagText);
+
                 const tagElement = document.createElement('div');
                 tagElement.className = 'tag';
                 tagElement.textContent = `#${tagText}`;
+
                 const removeBtn = document.createElement('span');
                 removeBtn.className = 'remove-tag';
                 removeBtn.textContent = '❌';
@@ -110,6 +112,7 @@
                     tags = tags.filter(t => t !== tagText);
                     updateTagsField();
                 });
+
                 tagElement.appendChild(removeBtn);
                 tagContainer.appendChild(tagElement);
                 updateTagsField();

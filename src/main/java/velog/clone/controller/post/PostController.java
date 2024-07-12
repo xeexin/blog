@@ -43,13 +43,14 @@ public class PostController {
 
         model.addAttribute("user", user);
         model.addAttribute("blog",blog);
-        model.addAttribute("postDTO", new PostDTO());
+        model.addAttribute("postDTO", new PostDTO()); // title, content, tag
 
         return "postForm";
     }
 
     @PostMapping("/@{username}/writePost")
     public String savePost(@PathVariable String username, @ModelAttribute PostDTO postDTO, Model model) {
+
         return savePostInternal(username, postDTO, false, model);    }
 
     @PostMapping("/@{username}/post/draft")
@@ -148,8 +149,9 @@ public class PostController {
         Post post = postService.convertToEntity(postDTO, blog);
         post.setDraft(isDraft);
         post.setCreatedAt(LocalDateTime.now());
-
         postService.savePost(post);
+
+
 
         saveTags(postDTO.getTags(), post);
 

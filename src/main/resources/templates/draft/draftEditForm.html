@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Draft</title>
+    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/styles.css}" href="../css/styles.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary {
+            background-color: #0052cc;
+            border-color: #0052cc;
+            font-size: 1rem;
+            padding: 0.75rem;
+            border-radius: 12px;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: #0041a8;
+            border-color: #0041a8;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: #e1e1e1;
+            border-radius: 4px;
+            padding: 5px 10px;
+            margin: 5px;
+            font-size: 14px;
+        }
+
+        .tag .remove-tag {
+            margin-left: 10px;
+            cursor: pointer;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>임시저장 게시글 수정</h2>
+    <form id="editDraftForm" th:action="@{|/@${user.username}/updateDraft/${post.title}|}" th:object="${post}" method="post">
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="제목을 입력하세요" required>
+        </div>
+        <div class="form-group">
+            <label for="content">내용</label>
+            <textarea id="content" th:field="*{content}" class="form-control" rows="10" placeholder="내용을 입력하세요" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="tagInput">태그</label>
+            <input type="text" id="tagInput" class="form-control" placeholder="태그를 입력하고 엔터키를 누르세요">
+        </div>
+        <div id="tagContainer" class="form-group">
+            <div th:each="tag : ${post.tags}" class="tag">
+                <span class="tag-name" th:text="${tag.name}">#태그</span>
+                <span class="remove-tag" onclick="removeTag(this, '${tag.name}')">❌</span>
+            </div>
+        </div>
+        <input type="hidden" id="tags" th:field="*{tags}" name="tags">
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">바로 출간하기</button>
+            <button type="button" class="btn btn-danger" onclick="deleteDraft()">임시글 삭제하기</button>
+        </div>
+    </form>
+</div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const tagInput = document.getElementById('tagInput');
+        const tagContainer = document.getElementById('tagContainer');
+        const hiddenTagField = document.getElementById('tags');
+
+        tagInput.addEventListener('keypress', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                addTag(tagInput.value);
+                tagInput.value = '';
+            }
+        });
+
+        function addTag(tagName) {
+            if (tagName.trim() !== '') {
+                const tagElement = document.createElement('div');
+                tagElement.className = 'tag';
+                tagElement.innerHTML = `<span class="tag-name">${tagName}</span><span class="remove-tag" onclick="removeTag(this, '${tagName}')">❌</span>`;
+                tagContainer.appendChild(tagElement);
+                updateHiddenTagField();
+            }
+        }
+
+        window.removeTag = function (element, tagName) {
+            element.parentElement.remove();
+            updateHiddenTagField();
+        }
+
+        function updateHiddenTagField() {
+            const tags = [];
+            document.querySelectorAll('.tag .tag-name').forEach(tagElement => {
+                tags.push(tagElement.textContent);
+            });
+            hiddenTagField.value = tags.join(',');
+        }
+
+        updateHiddenTagField();
+    });
+
+    const username = /*[[${user.username}]]*/ 'user';
+    const draftTitle = /*[[${post.title}]]*/ 'draftTitle';
+
+    function deleteDraft() {
+        if (confirm("임시저장 글을 삭제하시겠습니까?")) {
+            fetch(`/@${username}/deleteDraft/${draftTitle}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = `/@${username}/blogMain`;
+                    } else {
+                        alert('임시글 삭제에 실패했습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('임시글 삭제 중 오류가 발생했습니다.');
+                });
+        }
+    }
+
+</script>
+</html>

@@ -44,4 +44,11 @@ public class Post {
         tags.remove(tag);
         tag.setPost(null);
     }
+
+    public void setTags(List<Tag> tags) {
+        this.tags.clear();
+        for (Tag tag : tags) {
+            this.addTag(tag);
+        }
+    }
 }

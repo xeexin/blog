@@ -13,6 +13,7 @@ import velog.clone.repository.TagRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -134,4 +135,12 @@ public class PostService {
     public List<Post> findAllPublishedPosts() {
         return postRepository.findByDraftFalse();
     }
+
+    public Post findByBlogAndTitle(Blog blog, String postTitle) {
+        return postRepository.findByBlogAndTitle(blog, postTitle).orElseThrow(() -> new IllegalArgumentException("POST CAN NOT FOUND"));
+
+    }
+
+
+
 }
