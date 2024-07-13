@@ -122,6 +122,9 @@
             <div class="comment-meta">
                 <p>작성일시: <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
             </div>
+            <div th:if="${loginUser != null and loginUser.username == comment.user.username}">
+                <a th:href="@{|/@${post.blog.user.username}/post/${post.title}/editComment/${comment.id}|}" class="logout-button">댓글 수정</a>
+            </div>
         </div>
         <div class="comment-form">
             <h3>댓글 작성</h3>

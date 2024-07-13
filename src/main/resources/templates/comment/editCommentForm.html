@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>댓글 수정</title>
+    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/styles.css}" href="../css/styles.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-primary {
+            background-color: #0052cc;
+            border-color: #0052cc;
+            font-size: 1rem;
+            padding: 0.75rem;
+            border-radius: 12px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0041a8;
+            border-color: #0041a8;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>댓글 수정</h2>
+    <form th:action="@{|/@${username}/post/${postTitle}/editComment/${commentId}|}" method="post">
+        <div class="form-group">
+            <label for="reply">댓글</label>
+            <textarea id="reply" name="reply" class="form-control" placeholder="댓글을 입력하세요" required th:text="${commentDTO.reply}"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">수정</button>
+    </form>
+</div>
+</body>
+</html>
