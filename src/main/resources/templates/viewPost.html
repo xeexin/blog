@@ -112,10 +112,9 @@
         <div th:if="${loginUser != null and loginUser.username == post.blog.user.username}">
             <a th:href="@{|/@${post.blog.user.username}/post/${post.title}/edit|}" class="logout-button">게시글 수정</a>
         </div>
-
     </div>
     <div class="comments-section">
-        <h2>댓글</h2>
+        <h2>댓글 (<span th:text="${commentCount}"></span>)</h2>
         <div th:each="comment : ${comments}" class="comment">
             <p class="comment-user" th:text="${comment.user.username}">사용자명</p>
             <p class="comment-reply" th:text="${comment.reply}">댓글 내용</p>

@@ -63,6 +63,7 @@ public class PostController {
 
         Post post = postService.findByPostTitle(postTitle);
         List<Comment> comments = commentService.findByPostId(post.getId());
+        int commentCount = comments.size();
         List<Tag> tags = post.getTags(); // 태그 목록을 가져옵니다.
 
         boolean likedByUser = false;
@@ -82,6 +83,8 @@ public class PostController {
         model.addAttribute("likedByUser", likedByUser);
         model.addAttribute("cntLike", cntLike);
         model.addAttribute("tags", tags); // 태그 목록을 모델에 추가합니다.
+        model.addAttribute("commentCount", commentCount);
+
 
         return "viewPost";
     }
