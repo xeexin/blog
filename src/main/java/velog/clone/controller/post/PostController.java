@@ -75,6 +75,7 @@ public class PostController {
             cntLike = likeRepository.countByPostTitleAndLikeItTrue(postTitle);
         }
 
+        model.addAttribute("loginUser", loginUser);
         model.addAttribute("post", post);
         model.addAttribute("comments", comments);
         model.addAttribute("newComment", new Comment());

@@ -109,8 +109,8 @@
             </form>
             <span th:text="'좋아요 ' + ${cntLike} + '개'"></span>
         </div>
-        <div>
-            <a th:href="@{|/@${post.blog.user.username}/post/${post.title}/edit|}" class="logout-button">게시글 수정</a> <!-- 수정 버튼 추가 -->
+        <div th:if="${loginUser != null and loginUser.username == post.blog.user.username}">
+            <a th:href="@{|/@${post.blog.user.username}/post/${post.title}/edit|}" class="logout-button">게시글 수정</a>
         </div>
 
     </div>
