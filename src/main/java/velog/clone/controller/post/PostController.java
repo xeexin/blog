@@ -91,13 +91,13 @@ public class PostController {
         Post post = postService.findByPostTitle(postTitle);
         PostDTO postDTO = postService.convertToDTO(post);
 
-//        List<Tag> tags = post.getTags(); // 태그 목록을 가져옵니다.
+        List<Tag> tags = post.getTags(); // 태그 목록을 가져옵니다.
 
 
         model.addAttribute("user", user);
         model.addAttribute("post", post);
         model.addAttribute("postDTO", postDTO);
-//        model.addAttribute("tags", tags);
+        model.addAttribute("tags", tags);
 
         return "editPostForm";
     }

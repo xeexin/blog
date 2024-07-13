@@ -33,20 +33,18 @@
       <label for="content">내용</label>
       <textarea id="content" th:field="*{content}" class="form-control"></textarea>
     </div>
+
     <div class="form-group">
-      <label for="tags">태그</label>
+      <label for="tagInput">태그</label>
       <input type="text" id="tagInput" class="form-control" placeholder="태그를 입력하고 엔터키를 누르세요">
-      <div id="tagContainer">
-        <!-- 기존 태그들을 여기서 렌더링 -->
-        <div th:each="tag : ${post.tags}">
-          <div class="tag">
-            <span th:text="'#' + ${tag.name}"></span>
-            <span class="remove-tag" onclick="removeTag(this)">❌</span>
-          </div>
-        </div>
-      </div>
-      <input type="hidden" id="tags" th:field="*{tags}" name="tags">
     </div>
+    <div id="tagContainer" class="form-group">
+      <div th:each="tag : ${post.tags}" class="tag">
+        <span class="tag-name" th:text="${tag.name}">#태그</span>
+        <span class="remove-tag" onclick="removeTag(this, '${tag.name}')">❌</span>
+      </div>
+    </div>
+    <input type="hidden" id="tags" th:field="*{tags}" name="tags">
     <div>
       <button type="submit" class="btn btn-primary">수정 완료</button>
     </div>
@@ -55,49 +53,45 @@
     <button type="submit" class="btn btn-danger">삭제</button>
   </form>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-  const tagInput = document.getElementById('tagInput');
-  const tagContainer = document.getElementById('tagContainer');
-  const tagsField = document.getElementById('tags');
-  let tags = [];
+  document.addEventListener('DOMContentLoaded', (event) => {
+    const tagInput = document.getElementById('tagInput');
+    const tagContainer = document.getElementById('tagContainer');
+    const hiddenTagField = document.getElementById('tags');
 
-  // 기존 태그들 로드
-  document.querySelectorAll('#tagContainer .tag span:first-child').forEach(tagElement => {
-    const tagText = tagElement.textContent.trim().substring(1); // '#'을 제외한 태그 텍스트
-    tags.push(tagText);
-  });
+    tagInput.addEventListener('keypress', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        addTag(tagInput.value);
+        tagInput.value = '';
+      }
+    });
 
-  tagInput.addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const tagText = tagInput.value.trim();
-      if (tagText && !tags.includes(tagText)) {
-        tags.push(tagText);
+    function addTag(tagName) {
+      if (tagName.trim() !== '') {
         const tagElement = document.createElement('div');
         tagElement.className = 'tag';
-        tagElement.innerHTML = `<span>#${tagText}</span><span class="remove-tag" onclick="removeTag(this)">❌</span>`;
+        tagElement.innerHTML = `<span class="tag-name">${tagName}</span><span class="remove-tag" onclick="removeTag(this, '${tagName}')">❌</span>`;
         tagContainer.appendChild(tagElement);
-        updateTagsField();
+        updateHiddenTagField();
       }
-      tagInput.value = '';
     }
+
+    window.removeTag = function (element, tagName) {
+      element.parentElement.remove();
+      updateHiddenTagField();
+    }
+
+    function updateHiddenTagField() {
+      const tags = [];
+      document.querySelectorAll('.tag .tag-name').forEach(tagElement => {
+        tags.push(tagElement.textContent);
+      });
+      hiddenTagField.value = tags.join(',');
+    }
+
+    updateHiddenTagField();
   });
-
-  function removeTag(removeBtn) {
-    const tagElement = removeBtn.parentNode;
-    const tagText = tagElement.querySelector('span:first-child').textContent.trim().substring(1); // '#'을 제외한 태그 텍스트
-    tagContainer.removeChild(tagElement);
-    tags = tags.filter(t => t !== tagText);
-    updateTagsField();
-  }
-
-  function updateTagsField() {
-    tagsField.value = tags.join(',');
-  }
 </script>
 
 </body>
