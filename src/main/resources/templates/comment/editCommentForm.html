@@ -31,7 +31,31 @@
             background-color: #0041a8;
             border-color: #0041a8;
         }
+
+        .btn-danger {
+            background-color: #d9534f;
+            border-color: #d43f3a;
+            font-size: 1rem;
+            padding: 0.75rem;
+            border-radius: 12px;
+            margin-left: 10px;
+        }
+
+        .btn-danger:hover {
+            background-color: #c9302c;
+            border-color: #ac2925;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: flex-start;
+        }
     </style>
+    <script>
+        function confirmDelete(form) {
+            return confirm('정말로 댓글을 삭제하시겠습니까?');
+        }
+    </script>
 </head>
 <body>
 <div class="container">
@@ -41,7 +65,12 @@
             <label for="reply">댓글</label>
             <textarea id="reply" name="reply" class="form-control" placeholder="댓글을 입력하세요" required th:text="${commentDTO.reply}"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">수정</button>
+        <div class="btn-container">
+            <button type="submit" class="btn btn-primary">수정</button>
+        </div>
+    </form>
+    <form th:action="@{|/@${username}/post/${postTitle}/deleteComment/${commentId}|}" method="post" onsubmit="return confirmDelete(this)">
+        <button type="submit" class="btn btn-danger">댓글 삭제</button>
     </form>
 </div>
 </body>

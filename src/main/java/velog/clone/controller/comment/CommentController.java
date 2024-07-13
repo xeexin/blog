@@ -1,6 +1,7 @@
 package velog.clone.controller.comment;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class CommentController {
 
     private final CommentService commentService;
@@ -80,5 +82,27 @@ public class CommentController {
 
         return "redirect:/@" + encodedUsername + "/post" + encodedPostTitle;
     }
+
+    @PostMapping("/@{username}/post/{postTitle}/deleteComment/{commentId}")
+    public String deleteComment(@PathVariable String username, @PathVariable String postTitle, @PathVariable Long commentId, @SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser) {
+        Comment comment = commentService.findById(commentId);
+
+        commentService.deleteComment(comment);
+
+        //URL 인코딩
+        String encodedUsername = UriComponentsBuilder.fromPath(username)
+                .build()
+                .encode()
+                .toUriString();
+
+        String encodedPostTitle = UriComponentsBuilder.newInstance()
+                .pathSegment(postTitle)
+                .build()
+                .encode()
+                .toUriString();
+
+        return "redirect:/@" + encodedUsername + "/post" + encodedPostTitle;
+    }
+
 }
 
