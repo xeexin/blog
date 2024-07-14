@@ -93,6 +93,8 @@
         <a th:href="@{|/@${user.username}/writePost|}" class="logout-button">글 쓰기</a>
         <a th:href="@{|/@${user.username}/myPage|}" class="logout-button">마이 페이지</a>
         <a th:href="@{|/@${user.username}/blogMain|}" class="logout-button">나의 게시글</a>
+        <a th:href="@{|/@${user.username}/follow|}" class="logout-button">팔로잉/팔로워</a>
+
 
     </div>
     <div th:if="${blog == null}">

@@ -26,8 +26,6 @@ import java.util.Optional;
 @Controller
 @RequiredArgsConstructor
 public class myPageController {
-    private final UserRepository userRepository;
-    private final BlogRepository blogRepository;
     private final FileStore fileStore;
 
     private final UserService userService;

@@ -2,16 +2,20 @@ package velog.clone.controller.post;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import velog.clone.Const.SessionConst;
+import velog.clone.File.FileStore;
 import velog.clone.domain.*;
 import velog.clone.dto.PostDTO;
 import velog.clone.repository.*;
 import velog.clone.service.*;
 
+import java.net.MalformedURLException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -32,6 +36,9 @@ public class PostController {
     private final BlogService blogService;
     private final PostService postService;
     private final CommentService commentService;
+
+    private final FileStore fileStore;
+
 
 
     //글 쓰기
@@ -59,12 +66,15 @@ public class PostController {
     }
 
     @GetMapping("/@{username}/post/{postTitle}")
-    public String viewPost(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser, @PathVariable String postTitle, Model model) {
+    public String viewPost(@PathVariable String username, @SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser, @PathVariable String postTitle, Model model) {
 
         Post post = postService.findByPostTitle(postTitle);
         List<Comment> comments = commentService.findByPostId(post.getId());
         int commentCount = comments.size();
         List<Tag> tags = post.getTags(); // 태그 목록을 가져옵니다.
+
+        User user = userService.findByUsername(username);
+        Blog blog = blogService.findByUserId(user.getId());
 
         boolean likedByUser = false;
         Long cntLike = null;
@@ -84,9 +94,16 @@ public class PostController {
         model.addAttribute("cntLike", cntLike);
         model.addAttribute("tags", tags); // 태그 목록을 모델에 추가합니다.
         model.addAttribute("commentCount", commentCount);
+        model.addAttribute("blog", blog);
 
 
         return "viewPost";
+    }
+
+    @ResponseBody
+    @GetMapping("/{filename}")
+    public Resource downloadImg(@PathVariable("filename") String filename) throws MalformedURLException {
+        return new UrlResource("file:" + fileStore.getFullPath(filename));
     }
 
     @GetMapping("/@{username}/post/{postTitle}/edit")
