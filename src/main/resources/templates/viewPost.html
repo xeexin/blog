@@ -110,15 +110,14 @@
             <p>작성일시 : <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}">작성일시</span></p>
         </div>
 
-        <div th:if="${loginUser != null}">
-            <div th:if="${!isFollowing}">
-                <!-- 팔로우 버튼 (언팔로우 상태일 경우)  -->
+        <div th:if="${loginUser != null  and loginUser.username != post.blog.user.username}">
+
+        <div th:if="${!isFollowing}">
                 <form th:action="@{|/${post.blog.user.id}/${post.title}/follow|}" method="post">
                     <button type="submit">팔로우</button>
                 </form>
             </div>
             <div th:if="${isFollowing}">
-                <!-- 언팔로우 버튼 (팔로우 상태일 경우) -->
                 <form th:action="@{|/${post.blog.user.id}/${post.title}/unfollow|}" method="post">
                     <button type="submit">언팔로우</button>
                 </form>

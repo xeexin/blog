@@ -14,6 +14,7 @@ import velog.clone.repository.ImgFileRepository;
 import velog.clone.repository.UserRepository;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +34,14 @@ public class UserService {
     public User findById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
+    }
+
+    public List<User> getFollowingList(User user) {
+        return userRepository.getFollowingList(user.getUsername());
+    }
+
+    public List<User> getFollowerList(User user) {
+        return userRepository.getFollowerList(user.getUsername());
     }
 
     @Transactional

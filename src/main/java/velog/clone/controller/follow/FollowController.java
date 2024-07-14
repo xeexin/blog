@@ -2,17 +2,23 @@ package velog.clone.controller.follow;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import velog.clone.Const.SessionConst;
+import velog.clone.File.FileStore;
 import velog.clone.domain.Post;
 import velog.clone.domain.User;
 import velog.clone.service.BlogService;
 import velog.clone.service.FollowService;
 import velog.clone.service.PostService;
 import velog.clone.service.UserService;
+
+import java.net.MalformedURLException;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,12 +29,18 @@ public class FollowController {
     private final FollowService followService;
     private final PostService postService;
 
+
     @GetMapping("/@{username}/follow")
     public String showFollow(@PathVariable String username, Model model) {
 
         User user = userService.findByUsername(username);
+        List<User> followingList = userService.getFollowingList(user);
+        List<User> followerList = userService.getFollowerList(user);
+
 
         model.addAttribute("user", user);
+        model.addAttribute("followingList", followingList);
+        model.addAttribute("followerList", followerList);
 
         return "follow/followingHome";
     }

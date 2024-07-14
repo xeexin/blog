@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Follow</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 </head>
 <body>
 <h3>Following & Follower</h3>
+
+<h4>Following</h4>
+<ul>
+    <li th:each="followee : ${followingList}">
+        <span th:text="${followee.username}"></span>
+    </li>
+</ul>
+
+<h4>Followers</h4>
+<ul>
+    <li th:each="follower : ${followerList}">
+        <span th:text="${follower.username}"></span>
+    </li>
+</ul>
+
 </body>
 </html>
