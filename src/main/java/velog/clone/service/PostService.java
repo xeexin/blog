@@ -74,6 +74,8 @@ public class PostService {
                 .orElseThrow(() -> new IllegalArgumentException("Post Not Found For the User"));
     }
 
+
+
     public void deletePost(Post post) {
         postRepository.delete(post);
     }

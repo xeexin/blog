@@ -36,6 +36,7 @@ public class PostController {
     private final BlogService blogService;
     private final PostService postService;
     private final CommentService commentService;
+    private final FollowService followService;
 
     private final FileStore fileStore;
 
@@ -76,6 +77,10 @@ public class PostController {
         User user = userService.findByUsername(username);
         Blog blog = blogService.findByUserId(user.getId());
 
+        User postUser = userService.findById(post.getBlog().getId());
+
+        boolean isFollowing = followService.isFollowing(loginUser, postUser);
+
         boolean likedByUser = false;
         Long cntLike = null;
 
@@ -95,6 +100,7 @@ public class PostController {
         model.addAttribute("tags", tags); // 태그 목록을 모델에 추가합니다.
         model.addAttribute("commentCount", commentCount);
         model.addAttribute("blog", blog);
+        model.addAttribute("isFollowing", isFollowing);
 
 
         return "viewPost";
