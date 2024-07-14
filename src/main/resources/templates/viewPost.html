@@ -110,9 +110,15 @@
             <p>작성일시 : <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}">작성일시</span></p>
         </div>
 
-        <div th:if="${loginUser != null  and loginUser.username != post.blog.user.username}">
+        <div th:if="${loginUser != null and loginUser.username == post.blog.user.username}">
+            <a th:href="@{|/@${post.blog.user.username}/post/${post.title}/edit|}" class="logout-button">게시글 수정</a>
+            <div class="like-section">
+                <span th:text="'좋아요 ' + ${cntLike} + '개'"></span>
+            </div>
+        </div>
 
-        <div th:if="${!isFollowing}">
+        <div th:if="${loginUser != null and loginUser.username != post.blog.user.username}">
+            <div th:if="${!isFollowing}">
                 <form th:action="@{|/${post.blog.user.id}/${post.title}/follow|}" method="post">
                     <button type="submit">팔로우</button>
                 </form>
@@ -122,16 +128,12 @@
                     <button type="submit">언팔로우</button>
                 </form>
             </div>
-        </div>
-
-        <div class="like-section">
-            <form th:action="@{|/@${post.blog.user.username}/post/${post.title}/like|}" method="post">
-                <button type="submit" th:text="${likedByUser ? '♥' : '♡'}"></button>
-            </form>
-            <span th:text="'좋아요 ' + ${cntLike} + '개'"></span>
-        </div>
-        <div th:if="${loginUser != null and loginUser.username == post.blog.user.username}">
-            <a th:href="@{|/@${post.blog.user.username}/post/${post.title}/edit|}" class="logout-button">게시글 수정</a>
+            <div class="like-section">
+                <form th:action="@{|/@${post.blog.user.username}/post/${post.title}/like|}" method="post">
+                    <button type="submit" th:text="${likedByUser ? '♥' : '♡'}"></button>
+                </form>
+                <span th:text="'좋아요 ' + ${cntLike} + '개'"></span>
+            </div>
         </div>
     </div>
     <div class="comments-section">
