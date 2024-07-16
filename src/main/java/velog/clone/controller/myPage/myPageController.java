@@ -10,17 +10,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import velog.clone.File.FileStore;
-import velog.clone.controller.Img.ImgForm;
 import velog.clone.domain.Blog;
 import velog.clone.domain.User;
-import velog.clone.repository.BlogRepository;
-import velog.clone.repository.UserRepository;
 import velog.clone.service.BlogService;
 import velog.clone.service.UserService;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -78,4 +74,12 @@ public class myPageController {
 
         return "redirect:/@{username}/myPage";
     }
+
+    @PostMapping("/@{username}/myPage/secession")
+    public String userSecession(@PathVariable String username, Model model) {
+        userService.secessionUser(username);
+
+        return "redirect:/logout";
+    }
+
 }

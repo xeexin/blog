@@ -50,6 +50,11 @@
             </table>
             <a th:href="@{|/@${blog.user.username}/myPage/edit|}" class="btn btn-primary">Edit Profile</a>
             <a href="/" class="btn btn-primary">홈으로</a>
+
+            <!-- 탈퇴 버튼 -->
+            <form id="secessionForm" th:action="@{|/@${blog.user.username}/myPage/secession|}" method="post" style="display: inline;">
+                <button type="button" class="btn btn-danger" onclick="confirmSecession()">탈퇴</button>
+            </form>
         </div>
     </div>
 </div>
@@ -58,5 +63,15 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- JavaScript 코드 -->
+<script th:inline="javascript">
+    function confirmSecession() {
+        if (confirm("정말로 탈퇴하시겠습니까?")) {
+            document.getElementById('secessionForm').submit();
+        }
+    }
+</script>
+
 </body>
 </html>
