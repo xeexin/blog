@@ -32,7 +32,6 @@ public class JoinController {
                                @RequestParam("passwordConfirm") String passwordConfirm,
                                Model model) {
 
-
         //email 중복
         if (userRepository.existsByEmail(user.getEmail())) {
             model.addAttribute("error", "이미 사용 중인 이메일 입니다.");

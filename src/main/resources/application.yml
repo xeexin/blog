@@ -9,10 +9,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 
-    #    jpa:
-    #      hibernate:
-    #        ddl-auto: update
-    #      show-sql: true
+
     #
     #      properties:
     #        hibernate:
@@ -24,6 +21,9 @@ spring:
       hibernate:
         format_sql: true
         use_sql_comments: true
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
 
 
 file:

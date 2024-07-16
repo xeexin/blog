@@ -21,7 +21,6 @@ public class Post {
     @JoinColumn(name = "blog_id", nullable = false)
     private Blog blog;
 
-
     private String title; // 포스트 타이틀
     private String content; //포스트 내용
     private boolean draft;  //임시저장 여부
@@ -34,6 +33,9 @@ public class Post {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tag> tags = new ArrayList<>();
+
+    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Series series;
 
     public void addTag(Tag tag) {
         tags.add(tag);

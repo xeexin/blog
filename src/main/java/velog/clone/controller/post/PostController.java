@@ -41,7 +41,6 @@ public class PostController {
     private final FileStore fileStore;
 
 
-
     //글 쓰기
     @GetMapping("/@{username}/writePost")
     public String showPostForm(@PathVariable String username, Model model) {

@@ -3,10 +3,7 @@ package velog.clone.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import velog.clone.domain.Blog;
-import velog.clone.domain.Post;
-import velog.clone.domain.Tag;
-import velog.clone.domain.User;
+import velog.clone.domain.*;
 import velog.clone.dto.PostDTO;
 import velog.clone.repository.PostRepository;
 import velog.clone.repository.TagRepository;
@@ -143,6 +140,18 @@ public class PostService {
 
     }
 
+    public Post getPostById(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+    }
+
+//    public List<Series> findByUser(User user) {
+//        return postRepository.findByUser(user);
+//    }
+
+    public List<Post> findByBlog(Blog blog) {
+        return postRepository.findByBlogId(blog.getId());
+    }
 
 
 }
