@@ -34,4 +34,14 @@ public class SeriesService {
     public void save(Series series) {
         seriesRepository.save(series);
     }
+
+    public Series findBySeriesId(Long seriesId) {
+        return seriesRepository.findById(seriesId)
+                .orElseThrow(() -> new IllegalArgumentException("시리즈가 없습니다."));
+    }
+
+    public void deleteSeries(Series series) {
+        seriesRepository.delete(series);
+
+    }
 }

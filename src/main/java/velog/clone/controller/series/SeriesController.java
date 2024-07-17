@@ -36,12 +36,14 @@ public class SeriesController {
                              @PathVariable String username, Model model) {
 
         User loginUser = userService.findById(currentUser.getId());
+        User postUser = userService.findByUsername(username);
         User user = userService.findByUsername(username);
         Blog blog = blogService.findByUserId(user.getId());
         SeriesDTO seriesDTO = new SeriesDTO();
         List<Series> seriesList = seriesService.findByBlogId(blog.getId());
 
         model.addAttribute("loginUser", loginUser);
+        model.addAttribute("postUser", postUser);
         model.addAttribute("user", user);
         model.addAttribute("seriesDTO", seriesDTO);
         model.addAttribute("seriesList", seriesList);
@@ -74,4 +76,47 @@ public class SeriesController {
 
         return "redirect:/@" + encodedUsername + "/series";
     }
+
+    @PostMapping("/@{username}/series/edit")
+    public String editSeries(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User currentUser,
+                             @PathVariable String username,
+                             @RequestParam Long seriesId,
+                             @RequestParam String seriesName) {
+        User user = userService.findByUsername(currentUser.getUsername());
+        Blog blog = blogService.findByUserId(user.getId());
+        List<Series> byBlogId = seriesService.findByBlogId(blog.getId());
+        Series series = seriesService.findBySeriesId(seriesId);
+
+        series.setSeriesName(seriesName);
+        seriesService.save(series);
+
+        // URL 인코딩 처리
+        String encodedUsername = UriComponentsBuilder.fromPath(username)
+                .build()
+                .encode()
+                .toUriString();
+
+        return "redirect:/@" + encodedUsername + "/series";
+    }
+
+    @PostMapping("/@{username}/series/delete")
+    public String deleteSeries(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User currentUser,
+                               @PathVariable String username,
+                               @RequestParam Long seriesId) {
+
+        User user = userService.findByUsername(currentUser.getUsername());
+        Blog blog = blogService.findByUserId(user.getId());
+        List<Series> byBlogId = seriesService.findByBlogId(blog.getId());
+        Series series = seriesService.findBySeriesId(seriesId);
+        seriesService.deleteSeries(series);
+
+        // URL 인코딩 처리
+        String encodedUsername = UriComponentsBuilder.fromPath(username)
+                .build()
+                .encode()
+                .toUriString();
+
+        return "redirect:/@" + encodedUsername + "/series";
+    }
+
 }

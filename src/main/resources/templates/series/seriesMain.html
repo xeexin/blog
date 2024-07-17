@@ -10,8 +10,9 @@
 <form th:action="@{|/@${username}/series|}" th:object="${seriesDTO}" method="post">
     <label for="seriesName">Series Name:</label>
     <input type="text" id="seriesName" name="seriesName" th:field="*{seriesName}" required/>
-    <button type="submit">Create Series</button> // 버튼 누르면 post ("/@{username}/series")
+    <button type="submit">Create Series</button>
 </form>
+
 
 <!-- 등록된 시리즈 보여주기 -->
 <div>
@@ -19,9 +20,21 @@
     <div th:if="${seriesList == null || seriesList.isEmpty()}">
         시리즈가 없습니다
     </div>
+
     <ul th:if="${seriesList != null && !seriesList.isEmpty()}">
         <li th:each="series : ${seriesList}">
             <span th:text="${series.seriesName}"></span>
+            <!-- 수정하기 폼 -->
+            <form th:if="${loginUser}==${postUser}" th:action="@{|/@${user.username}/series/edit|}" method="post" style="display:inline;">
+                <input type="hidden" name="seriesId" th:value="${series.id}"/>
+                <input type="text" name="seriesName" th:value="${series.seriesName}" required/>
+                <button type="submit">Edit</button>
+            </form>
+            <!-- 삭제하기 폼 -->
+            <form th:if="${loginUser}==${postUser}" th:action="@{|/@${user.username}/series/delete|}" method="post" style="display:inline;">
+                <input type="hidden" name="seriesId" th:value="${series.id}"/>
+                <button type="submit">Delete</button>
+            </form>
         </li>
     </ul>
 </div>
