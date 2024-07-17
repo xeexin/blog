@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 import velog.clone.Const.SessionConst;
 import velog.clone.domain.Blog;
 import velog.clone.domain.Post;
@@ -36,33 +37,41 @@ public class SeriesController {
 
         User loginUser = userService.findById(currentUser.getId());
         User user = userService.findByUsername(username);
-        Optional<Blog> blog = blogRepository.findByUserId(user.getId());
-
-        if (!blog.isPresent()) {
-            return "/series/seriesMain";
-        }
-
-        List<Post> post = postService.findByBlog(blog.get());
-
-//        List<Series> seriesList = seriesService.getSeriesByPost(post)
+        Blog blog = blogService.findByUserId(user.getId());
         SeriesDTO seriesDTO = new SeriesDTO();
+        List<Series> seriesList = seriesService.findByBlogId(blog.getId());
 
         model.addAttribute("loginUser", loginUser);
         model.addAttribute("user", user);
         model.addAttribute("seriesDTO", seriesDTO);
-//        model.addAttribute("seriesList", seriesList);
+        model.addAttribute("seriesList", seriesList);
 
         return "/series/seriesMain";
     }
 
     @PostMapping("/@{username}/series")
     public String createSeries(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User currentUser,
-                               @PathVariable String username, Model model,@RequestParam Long postId,
+                               @PathVariable String username, Model model,
                                @RequestParam String seriesName, SeriesDTO seriesDTO) {
 
-        Post post = postService.getPostById(postId);
-        seriesService.createSeries(post, seriesName);
+        User user = userService.findByUsername(username);
+        Blog blog = blogService.findByUserId(user.getId());
 
-        return "redirect:/@{username}/series";
+        seriesDTO.setSeriesName(seriesName);
+
+        Series series = new Series();
+        series.setSeriesName(seriesDTO.getSeriesName());
+        series.setBlog(blog);
+
+        seriesService.save(series);
+
+
+        // URL 인코딩 처리
+        String encodedUsername = UriComponentsBuilder.fromPath(username)
+                .build()
+                .encode()
+                .toUriString();
+
+        return "redirect:/@" + encodedUsername + "/series";
     }
 }

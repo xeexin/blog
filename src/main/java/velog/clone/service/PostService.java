@@ -154,4 +154,7 @@ public class PostService {
     }
 
 
+    public List<Series> findBySeries(Series series) {
+        return postRepository.findBySeries(series);
+    }
 }

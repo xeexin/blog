@@ -7,23 +7,23 @@
 <body>
 <h2>Series</h2>
 <!-- 시리즈 만들기 폼 -->
-<form th:action="@{|/@{username}/series|}" th:object="${seriesDTO}" method="post">
-    <input type="hidden" th:name="postId" th:value="${post.id}"/>
+<form th:action="@{|/@${username}/series|}" th:object="${seriesDTO}" method="post">
     <label for="seriesName">Series Name:</label>
     <input type="text" id="seriesName" name="seriesName" th:field="*{seriesName}" required/>
-    <button type="submit">Create Series</button>
+    <button type="submit">Create Series</button> // 버튼 누르면 post ("/@{username}/series")
 </form>
 
 <!-- 등록된 시리즈 보여주기 -->
 <div>
     <h3>Registered Series</h3>
-    <ul>
+    <div th:if="${seriesList == null || seriesList.isEmpty()}">
+        시리즈가 없습니다
+    </div>
+    <ul th:if="${seriesList != null && !seriesList.isEmpty()}">
         <li th:each="series : ${seriesList}">
             <span th:text="${series.seriesName}"></span>
         </li>
     </ul>
 </div>
-
-
 </body>
 </html>

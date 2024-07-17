@@ -9,6 +9,7 @@ import velog.clone.domain.User;
 import velog.clone.repository.SeriesRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,5 +27,11 @@ public class SeriesService {
     }
 
 
+    public List<Series> findByBlogId(Long blogId) {
+        return seriesRepository.findByBlogId(blogId);
+    }
 
+    public void save(Series series) {
+        seriesRepository.save(series);
+    }
 }
