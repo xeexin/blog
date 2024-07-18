@@ -10,4 +10,6 @@ public class PostDTO {
     private String title;
     private String content;
     private String tags; //태그들을 콤마로 구분한 문자열
+    private String seriesName;
+
 }

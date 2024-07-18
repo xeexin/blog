@@ -76,6 +76,15 @@
             <div id="tagContainer"></div>
             <input type="hidden" id="tags" th:field="*{tags}" name="tags">
         </div>
+
+        <div class="form-group">
+            <label for="series">시리즈</label>
+            <select id="series" th:field="*{seriesName}" class="form-control">
+                <option value="" disabled selected>시리즈를 선택하세요</option>
+                <option th:each="series : ${seriesList}" th:value="${series.seriesName}" th:text="${series.seriesName}"></option>
+            </select>
+        </div>
+
         <div class="form-group">
             <button type="button" class="btn btn-secondary" onclick="saveDraft()">임시저장</button>
             <button type="submit" class="btn btn-primary">포스팅하기</button>

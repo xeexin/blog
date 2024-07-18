@@ -21,7 +21,6 @@ public class SeriesService {
 
     public Series createSeries(Post post, String seriesName) {
         Series series = new Series();
-        series.setPost(post);
         series.setSeriesName(seriesName);
         return seriesRepository.save(series);
     }
@@ -44,4 +43,6 @@ public class SeriesService {
         seriesRepository.delete(series);
 
     }
+
+
 }

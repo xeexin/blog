@@ -104,6 +104,10 @@
             <h4>태그:</h4>
             <div th:each="tag : ${tags}" class="tag" th:text="${tag.name}">태그</div>
         </div>
+        <div class="series-section">
+            <h4>시리즈:</h4>
+            <span th:text="${seriesName}">시리즈 이름</span>
+        </div>
         <div class="post-meta">
             <img th:src="@{'/img/' + ${blog.profileImg.attachFile.storeFileName}}" alt="Profile Image" class="profile-img">
             <p>작성자: <span th:text="${post.blog.user.username}"></span></p>

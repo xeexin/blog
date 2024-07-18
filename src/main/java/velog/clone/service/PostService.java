@@ -19,6 +19,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final TagService tagService;
+    private final SeriesService seriesService;
 
     public PostDTO convertToDTO(Post post) {
 
@@ -33,16 +34,35 @@ public class PostService {
     }
 
     public Post convertToEntity(PostDTO postDTO, Blog blog) {
+
         Post post = new Post();
         post.setTitle(postDTO.getTitle());
         post.setContent(postDTO.getContent());
         post.setBlog(blog);
 
+        // 태그 설정 로직
         String[] tagNames = postDTO.getTags().split(",");
         for (String tagName : tagNames) {
             Tag tag = new Tag(tagName.trim());
             post.addTag(tag);
         }
+
+        // 시리즈 설정 로직
+//        if (postDTO.getSeriesName() != null && !postDTO.getSeriesName().isEmpty()) {
+//            List<Series> seriesList = seriesService.findByPostId(post.getId());
+//            for (Series series : seriesList) {
+//                String seriesName = series.getSeriesName();
+//
+//                if (seriesName == post.getSeries().getSeriesName()) {
+//                    series = new Series();
+//                    series.setSeriesName(postDTO.getSeriesName());
+//                    series.setBlog(blog);
+//                    series.setPost(post);
+//
+//                    post.setSeries(series);
+//                }
+//            }
+//        }
 
         return post;
 
@@ -154,7 +174,4 @@ public class PostService {
     }
 
 
-    public List<Series> findBySeries(Series series) {
-        return postRepository.findBySeries(series);
-    }
 }

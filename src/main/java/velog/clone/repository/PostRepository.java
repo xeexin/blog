@@ -25,7 +25,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findByDraftFalse();
 
-    List<Series> findBySeries(Series series);
-
 
 }

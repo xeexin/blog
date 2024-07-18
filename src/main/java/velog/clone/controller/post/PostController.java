@@ -37,6 +37,7 @@ public class PostController {
     private final PostService postService;
     private final CommentService commentService;
     private final FollowService followService;
+    private final SeriesService seriesService;
 
     private final FileStore fileStore;
 
@@ -50,7 +51,12 @@ public class PostController {
 
         model.addAttribute("user", user);
         model.addAttribute("blog",blog);
-        model.addAttribute("postDTO", new PostDTO()); // title, content, tag
+        model.addAttribute("postDTO", new PostDTO()); // title, content, tag, series
+
+
+        List<Series> seriesList = seriesService.findByBlogId(user.getBlog().getId());
+        model.addAttribute("seriesList", seriesList);
+
 
         return "postForm";
     }
@@ -58,7 +64,9 @@ public class PostController {
     @PostMapping("/@{username}/writePost")
     public String savePost(@PathVariable String username, @ModelAttribute PostDTO postDTO, Model model) {
 
-        return savePostInternal(username, postDTO, false, model);    }
+
+        return savePostInternal(username, postDTO, false, model);
+    }
 
     @PostMapping("/@{username}/post/draft")
     public String saveDraft(@PathVariable String username, @ModelAttribute PostDTO postDTO, Model model) {
@@ -68,10 +76,12 @@ public class PostController {
     @GetMapping("/@{username}/post/{postTitle}")
     public String viewPost(@PathVariable String username, @SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser, @PathVariable String postTitle, Model model) {
 
+
         Post post = postService.findByPostTitle(postTitle);
         List<Comment> comments = commentService.findByPostId(post.getId());
         int commentCount = comments.size();
         List<Tag> tags = post.getTags(); // 태그 목록을 가져옵니다.
+        String seriesName = post.getSeriesName();
 
         User user = userService.findByUsername(username);
         Blog blog = blogService.findByUserId(user.getId());
@@ -79,6 +89,9 @@ public class PostController {
         User postUser = userService.findById(post.getBlog().getId());
 
         boolean isFollowing = followService.isFollowing(loginUser, postUser);
+
+        //등록된 시리즈를 가져오고 싶다.
+
 
         boolean likedByUser = false;
         Long cntLike = null;
@@ -100,6 +113,7 @@ public class PostController {
         model.addAttribute("commentCount", commentCount);
         model.addAttribute("blog", blog);
         model.addAttribute("isFollowing", isFollowing);
+        model.addAttribute("seriesName", seriesName);
 
 
         return "viewPost";
@@ -173,10 +187,13 @@ public class PostController {
         Blog blog = blogService.findByUserId(user.getId());
 
         Post post = postService.convertToEntity(postDTO, blog);
+
         post.setDraft(isDraft);
         post.setCreatedAt(LocalDateTime.now());
-        postService.savePost(post);
 
+        setSeriesForPost(postDTO, blog, post);
+
+        postService.savePost(post);
 
 
         saveTags(postDTO.getTags(), post);
@@ -225,4 +242,16 @@ public class PostController {
                 });
     }
 
+    private void setSeriesForPost(PostDTO postDTO, Blog blog, Post post) {
+        if (postDTO.getSeriesName() != null && !postDTO.getSeriesName().isEmpty()) {
+            post.setSeriesName(postDTO.getSeriesName());
+//            List<Series> seriesList = seriesService.findByBlogId(blog.getId());
+//            for (Series series : seriesList) {
+//                if (series.getSeriesName().equals(postDTO.getSeriesName())) {
+//                    post.setSeriesName(series);
+//                    break;
+//                }
+//            }
+        }
+    }
 }

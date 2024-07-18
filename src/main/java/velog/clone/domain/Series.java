@@ -12,10 +12,6 @@ public class Series {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "post_id", nullable = false)
-    private Post post;
-
     @ManyToOne
     @JoinColumn(name = "blog_id", nullable = false)
     private Blog blog;

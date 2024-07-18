@@ -105,6 +105,7 @@ public class SeriesController {
                                @RequestParam Long seriesId) {
 
         User user = userService.findByUsername(currentUser.getUsername());
+
         Blog blog = blogService.findByUserId(user.getId());
         List<Series> byBlogId = seriesService.findByBlogId(blog.getId());
         Series series = seriesService.findBySeriesId(seriesId);
