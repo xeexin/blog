@@ -90,9 +90,6 @@ public class PostController {
 
         boolean isFollowing = followService.isFollowing(loginUser, postUser);
 
-        //등록된 시리즈를 가져오고 싶다.
-
-
         boolean likedByUser = false;
         Long cntLike = null;
 

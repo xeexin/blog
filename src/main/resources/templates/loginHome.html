@@ -9,6 +9,44 @@
         body {
             background-color: #f3f4f6;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #0052cc;
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #ddd;
+        }
+
+        .navbar .nav-left a {
+            margin-right: 1rem;
+        }
+
+        .navbar .nav-right a {
+            margin-left: 1rem;
+        }
+
+        .content {
+            padding-top: 80px; /* 네비게이션 바 높이를 고려하여 패딩 추가 */
         }
 
         .welcome-container {
@@ -23,36 +61,19 @@
         }
 
         .welcome-message {
-            font-size: 1.5rem;
+            font-size: 2rem;
             margin-bottom: 1.5rem;
             color: #0052cc;
             font-weight: bold;
         }
 
-        .logout-button {
-            font-size: 1rem;
-            padding: 0.75rem;
-            border-radius: 12px;
-            width: 150px;
-            background-color: #0052cc;
-            border-color: #0052cc;
-            color: white;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            margin: 0.5rem;
-            transition: background-color 0.3s ease;
-        }
-
-        .logout-button:hover {
-            background-color: #0041a8;
-            border-color: #0041a8;
-        }
-
         .blog-container {
             max-width: 800px;
-            margin: 20px auto;
-            padding: 0 1rem;
+            margin: 2rem auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         .post {
@@ -60,12 +81,16 @@
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 16px;
-            margin-bottom: 20px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .post:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         .post-title {
-            font-size: 1.75rem;
+            font-size: 1.5rem;
             color: #333;
             margin-bottom: 10px;
         }
@@ -83,35 +108,38 @@
     </style>
 </head>
 <body>
-<div class="container welcome-container">
-    <h1>HELLO</h1>
-    <h1 class="welcome-message"><span th:text="${user.username}"></span>.log!</h1>
-    <div>
+<nav class="navbar">
+    <div class="nav-left">
+        <span>Velog</span>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/blogMain|}">나의 게시글</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/series|}">나의 시리즈</a>
+    </div>
+    <div class="nav-right">
+        <a th:if="${blog == false}" th:href="@{|/@${user.username}/createBlog|}">블로그 만들기</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/writePost|}">글 쓰기</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/myPage|}">마이 페이지</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/follow|}">팔로잉/팔로워</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/draft|}">임시저장 글</a>
         <a th:href="@{/logout}" class="logout-button">로그아웃</a>
+        <a th:if="${role == 'ADMIN'}" href="/admin">관리자 페이지</a>
+    </div>
+</nav>
+
+<div class="content">
+    <div class="container welcome-container">
+        <h1 class="welcome-message">HELLO, <span th:text="${user.username}"></span>.log!</h1>
     </div>
 
-    <div th:if="${blog == false}">
-        <a th:href="@{|/@${user.username}/createBlog|}" class="logout-button">블로그 만들기</a>
-    </div>
-
-    <div th:if="${blog == true}">
-        <a th:href="@{|/@${user.username}/writePost|}" class="logout-button">글 쓰기</a>
-        <a th:href="@{|/@${user.username}/myPage|}" class="logout-button">마이 페이지</a>
-        <a th:href="@{|/@${user.username}/blogMain|}" class="logout-button">나의 게시글</a>
-        <a th:href="@{|/@${user.username}/follow|}" class="logout-button">팔로잉/팔로워</a>
-    </div>
-
-
-</div>
-<main class="blog-container">
-    <div th:each="post : ${posts}" class="post">
-        <a th:href="@{|/@${post.blog.user.username}/post/${post.title}|}" class="post-title" th:text="${post.title}"></a>
-        <p class="post-content" th:text="${#strings.abbreviate(post.content, 100)}"></p>
-        <div class="post-meta">
-            <p>작성자 : <span th:text="${post.blog.user.username}"></span></p>
-            <p>작성일시 : <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+    <main class="blog-container">
+        <div th:each="post : ${posts}" class="post">
+            <a th:href="@{|/@${post.blog.user.username}/post/${post.title}|}" class="post-title" th:text="${post.title}"></a>
+            <p class="post-content" th:text="${#strings.abbreviate(post.content, 100)}"></p>
+            <div class="post-meta">
+                <p>작성자 : <span th:text="${post.blog.user.username}"></span></p>
+                <p>작성일시 : <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+            </div>
         </div>
-    </div>
-</main>
+    </main>
+</div>
 </body>
 </html>
