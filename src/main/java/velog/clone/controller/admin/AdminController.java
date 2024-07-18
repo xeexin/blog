@@ -28,11 +28,11 @@ public class AdminController {
     @GetMapping("/admin")
     public String showAdmin(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser, Model model) {
 
-        User user = userService.findByUsername(loginUser.getUsername());
-        Blog blog = blogService.findByUserId(user.getId());
-        List<Post> postList = postService.findByBlog(blog);
 
-        model.addAttribute("postList", postList);
+        List<Post> allPublishedPosts = postService.findAllPublishedPosts();
+
+
+        model.addAttribute("postList", allPublishedPosts);
 
 
         return "/admin/admin";

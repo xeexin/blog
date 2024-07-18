@@ -127,6 +127,9 @@ public class PostController {
         User user = userService.findByUsername(username);
         Post post = postService.findByPostTitle(postTitle);
         PostDTO postDTO = postService.convertToDTO(post);
+        Blog blog = blogService.findByUserId(user.getId());
+
+        List<Series> seriesList = seriesService.findByBlogId(blog.getId());
 
         List<Tag> tags = post.getTags(); // 태그 목록을 가져옵니다.
 
@@ -135,7 +138,7 @@ public class PostController {
         model.addAttribute("post", post);
         model.addAttribute("postDTO", postDTO);
         model.addAttribute("tags", tags);
-
+        model.addAttribute("seriesList", seriesList);
         return "editPostForm";
     }
 
@@ -144,9 +147,6 @@ public class PostController {
         Post post = postService.findByPostTitle(postTitle);
 
         postService.updatePost(post.getId(), postDTO);
-
-        // 새 태그 목록으로 업데이트
-//        postService.updateTags(post.getId(), postDTO.getTags());
 
         String newPostTitle = postDTO.getTitle();
 

@@ -13,4 +13,6 @@ public interface SeriesRepository extends JpaRepository<Series, Long> {
 
     List<Series> findByBlogId(Long blogId);
 
+    Series findBySeriesName(String seriesName);
+
 }

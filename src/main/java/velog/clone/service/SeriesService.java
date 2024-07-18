@@ -45,4 +45,7 @@ public class SeriesService {
     }
 
 
+    public Series findBySeriesName(String seriesName) {
+        return seriesRepository.findBySeriesName(seriesName);
+    }
 }

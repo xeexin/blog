@@ -26,6 +26,7 @@ public class PostService {
         PostDTO postDTO = new PostDTO();
         postDTO.setTitle(post.getTitle());
         postDTO.setContent(post.getContent());
+        postDTO.setSeriesName(post.getSeriesName());
         postDTO.setTags(post.getTags().stream()
                 .map(Tag::getName)
                 .collect(Collectors.joining(",")));
@@ -81,6 +82,13 @@ public class PostService {
         for (String tagName : tagNames) {
             Tag tag = new Tag(tagName.trim());
             post.addTag(tag);
+        }
+
+        //시리즈
+        if (postDTO.getSeriesName() != null && !postDTO.getSeriesName().isEmpty()) {
+            Series series = seriesService.findBySeriesName(postDTO.getSeriesName());
+            post.setSeriesName(series.getSeriesName());
+
         }
 
         postRepository.save(post);
