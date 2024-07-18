@@ -4,18 +4,126 @@
     <meta charset="UTF-8">
     <title>Series</title>
 </head>
+<style>
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        background-color: #0052cc;
+        color: white;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .navbar a {
+        color: white;
+        text-decoration: none;
+        margin-left: 1rem;
+        transition: color 0.3s ease;
+    }
+
+    .navbar a:hover {
+        color: #ddd;
+    }
+
+    .navbar .nav-left a {
+        margin-right: 1rem;
+    }
+
+    .navbar .nav-right a {
+        margin-left: 1rem;
+    }
+
+    .form-container {
+        margin: 20px 0;
+    }
+
+    .form-container h2 {
+        margin-bottom: 20px;
+    }
+
+    .form-container form {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container form label, .form-container form input, .form-container form button {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .form-container form button {
+        background-color: #0052cc;
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .form-container form button:hover {
+        background-color: #004bb5;
+    }
+
+    .series-list {
+        margin-top: 20px;
+    }
+
+    .series-list ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .series-list ul li {
+        background-color: #fff;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .series-list ul li input[type="text"], .series-list ul li button {
+        margin-left: 10px;
+    }
+</style>
 <body>
+<nav class="navbar">
+    <div class="nav-left">
+        <a th:href="@{/}"><span>Velog</span></a>
+
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/blogMain|}">나의 게시글</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/series|}">나의 시리즈</a>
+    </div>
+    <div class="nav-right">
+        <a th:if="${blog == false}" th:href="@{|/@${user.username}/createBlog|}">블로그 만들기</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/writePost|}">글 쓰기</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/myPage|}">마이 페이지</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/follow|}">팔로잉/팔로워</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/draft|}">임시저장 글</a>
+        <a th:href="@{/logout}" class="logout-button">로그아웃</a>
+        <a th:if="${role == 'ADMIN'}" href="/admin">관리자 페이지</a>
+    </div>
+</nav>
 <h2>Series</h2>
 <!-- 시리즈 만들기 폼 -->
-<form th:action="@{|/@${username}/series|}" th:object="${seriesDTO}" method="post">
-    <label for="seriesName">Series Name:</label>
-    <input type="text" id="seriesName" name="seriesName" th:field="*{seriesName}" required/>
-    <button type="submit">Create Series</button>
-</form>
-
+<div class="form-container">
+    <form th:action="@{|/@${username}/series|}" th:object="${seriesDTO}" method="post">
+        <label for="seriesName">Series Name:</label>
+        <input type="text" id="seriesName" name="seriesName" th:field="*{seriesName}" required/>
+        <button type="submit">Create Series</button>
+    </form>
+</div>
 
 <!-- 등록된 시리즈 보여주기 -->
-<div>
+<div class="series-list">
     <h3>Registered Series</h3>
     <div th:if="${seriesList == null || seriesList.isEmpty()}">
         시리즈가 없습니다

@@ -217,7 +217,8 @@ public class PostController {
         model.addAttribute("message", isDraft ? "임시저장 완료" : "포스팅 완료");
 
         if (isDraft) {
-            return "redirect:/@" + encodedUsername + "/blogMain";
+//            return "redirect:/@" + encodedUsername + "/blogMain";
+            return "redirect:/";
         }
         return "redirect:/@" + encodedUsername + "/post" + encodedPostTitle;
     }

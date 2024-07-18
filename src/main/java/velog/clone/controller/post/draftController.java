@@ -92,7 +92,7 @@ public class draftController {
                 .encode()
                 .toUriString();
 
-        return "redirect:/@" + encodedUsername + "/blogMain";
+        return "redirect:/";
     }
 
     @PostMapping("/@{username}/deleteDraft/{draftTitle}")
@@ -102,8 +102,6 @@ public class draftController {
         Blog blog = blogService.findByUserId(user.getId());
 
         Post post = postService.findByBlogAndTitle(blog, draftTitle);
-
-        log.info("DELETE :::: ");
 
         if (post != null && post.isDraft()) {
             postService.deletePost(post.getId());
@@ -115,7 +113,8 @@ public class draftController {
                 .encode()
                 .toUriString();
 
-        return "redirect:/@" + encodedUsername + "/blogMain";
+
+        return "redirect:/";
 
     }
 

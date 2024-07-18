@@ -4,23 +4,107 @@
     <meta charset="UTF-8">
     <title>Follow</title>
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 70px; /* Ensure content is not hidden behind the fixed navbar */
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #0052cc;
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #ddd;
+        }
+
+        .navbar .nav-left a {
+            margin-right: 1rem;
+        }
+
+        .navbar .nav-right a {
+            margin-left: 1rem;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .follow-list {
+            margin-top: 20px;
+        }
+
+        .follow-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .follow-list ul li {
+            background-color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
-<h3>Following & Follower</h3>
+<nav class="navbar">
+    <div class="nav-left">
+        <a th:href="@{/}"><span>Velog</span></a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/blogMain|}">나의 게시글</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/series|}">나의 시리즈</a>
+    </div>
+    <div class="nav-right">
+        <a th:if="${blog == false}" th:href="@{|/@${user.username}/createBlog|}">블로그 만들기</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/writePost|}">글 쓰기</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/myPage|}">마이 페이지</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/follow|}">팔로잉/팔로워</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/draft|}">임시저장 글</a>
+        <a th:href="@{/logout}" class="logout-button">로그아웃</a>
+        <a th:if="${role == 'ADMIN'}" href="/admin">관리자 페이지</a>
+    </div>
+</nav>
 
-<h4>Following</h4>
-<ul>
-    <li th:each="followee : ${followingList}">
-        <span th:text="${followee.username}"></span>
-    </li>
-</ul>
+<div class="content">
+    <h3>Following & Follower</h3>
 
-<h4>Followers</h4>
-<ul>
-    <li th:each="follower : ${followerList}">
-        <span th:text="${follower.username}"></span>
-    </li>
-</ul>
+    <h4>Following</h4>
+    <div class="follow-list">
+        <ul>
+            <li th:each="followee : ${followingList}">
+                <span th:text="${followee.username}"></span>
+            </li>
+        </ul>
+    </div>
+
+    <h4>Followers</h4>
+    <div class="follow-list">
+        <ul>
+            <li th:each="follower : ${followerList}">
+                <span th:text="${follower.username}"></span>
+            </li>
+        </ul>
+    </div>
+</div>
 
 </body>
 </html>

@@ -245,3 +245,35 @@
 /*    height: 100vh;*/
 /*    margin: 0;*/
 /*}*/
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #0052cc;
+    color: white;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin-left: 1rem;
+    transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+    color: #ddd;
+}
+
+.navbar .nav-left a {
+    margin-right: 1rem;
+}
+
+.navbar .nav-right a {
+    margin-left: 1rem;
+}

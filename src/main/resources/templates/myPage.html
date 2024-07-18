@@ -7,6 +7,42 @@
     <!-- Bootstrap CSS from local static folder -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        body {
+            margin-top: 70px; /* Ensure content is not hidden behind the fixed navbar */
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #0052cc;
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #ddd;
+        }
+
+        .navbar .nav-left a {
+            margin-right: 1rem;
+        }
+
+        .navbar .nav-right a {
+            margin-left: 1rem;
+        }
+
         .profile-img {
             width: 150px;
             height: 150px;
@@ -14,15 +50,106 @@
             border-radius: 50%;
             margin-bottom: 20px;
         }
+
         .profile-container {
             margin-top: 50px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         .profile-info {
             margin-left: 30px;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .btn-primary, .btn-danger {
+            margin-right: 10px;
+        }
+
+        .form-container {
+            margin: 20px 0;
+        }
+
+        .form-container h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-container form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container form label, .form-container form input, .form-container form button {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .form-container form button {
+            background-color: #0052cc;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .form-container form button:hover {
+            background-color: #004bb5;
+        }
+
+        .series-list, .follow-list {
+            margin-top: 20px;
+        }
+
+        .series-list ul, .follow-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .series-list ul li, .follow-list ul li {
+            background-color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .series-list ul li form, .follow-list ul li form {
+            display: inline;
+        }
+
+        .series-list ul li input[type="text"], .series-list ul li button {
+            margin-left: 10px;
         }
     </style>
 </head>
 <body>
+<nav class="navbar">
+    <div class="nav-left">
+        <a th:href="@{/}"><span>Velog</span></a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/blogMain|}">나의 게시글</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/series|}">나의 시리즈</a>
+    </div>
+    <div class="nav-right">
+        <a th:if="${blog == false}" th:href="@{|/@${user.username}/createBlog|}">블로그 만들기</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/writePost|}">글 쓰기</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/myPage|}">마이 페이지</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/follow|}">팔로잉/팔로워</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/draft|}">임시저장 글</a>
+        <a th:href="@{/logout}" class="logout-button">로그아웃</a>
+        <a th:if="${role == 'ADMIN'}" href="/admin">관리자 페이지</a>
+    </div>
+</nav>
 
 <div class="container profile-container">
     <div class="row">

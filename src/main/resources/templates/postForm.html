@@ -7,6 +7,38 @@
     <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
     <link th:href="@{/css/styles.css}" href="../css/styles.css" rel="stylesheet">
     <style>
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #0052cc;
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #ddd;
+        }
+
+        .navbar .nav-left a {
+            margin-right: 1rem;
+        }
+
+        .navbar .nav-right a {
+            margin-left: 1rem;
+        }
+
         .tag {
             display: inline-block;
             background-color: #e1e1e1;
@@ -58,6 +90,23 @@
     </style>
 </head>
 <body>
+<nav class="navbar">
+    <div class="nav-left">
+        <a th:href="@{/}"><span>Velog</span></a>
+
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/blogMain|}">나의 게시글</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/series|}">나의 시리즈</a>
+    </div>
+    <div class="nav-right">
+        <a th:if="${blog == false}" th:href="@{|/@${user.username}/createBlog|}">블로그 만들기</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/writePost|}">글 쓰기</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/myPage|}">마이 페이지</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/follow|}">팔로잉/팔로워</a>
+        <a th:if="${blog == true}" th:href="@{|/@${user.username}/draft|}">임시저장 글</a>
+        <a th:href="@{/logout}" class="logout-button">로그아웃</a>
+        <a th:if="${role == 'ADMIN'}" href="/admin">관리자 페이지</a>
+    </div>
+</nav>
 <div class="container form-container">
     <h2 class="form-title">포스팅</h2>
 
