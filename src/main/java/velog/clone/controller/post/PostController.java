@@ -174,8 +174,14 @@ public class PostController {
                 .encode()
                 .toUriString();
 
+        List<Comment> comments = commentService.findByPostId(post.getId());
+        for (Comment comment : comments) {
+            commentService.deleteComment(comment);
+        }
         postService.deletePost(post.getId());
-        return "redirect:/@" + encodedUsername + "/blogMain";
+
+
+        return "redirect:/";
     }
 
 

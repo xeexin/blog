@@ -34,10 +34,6 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tag> tags = new ArrayList<>();
 
-
-//    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private Series series;
-
     private String seriesName;
 
     public void addTag(Tag tag) {
