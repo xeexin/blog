@@ -91,7 +91,9 @@
     <div class="follow-list">
         <ul>
             <li th:each="followee : ${followingList}">
+                <a th:href="@{|/user/@${followee.username}/home|}">
                 <span th:text="${followee.username}"></span>
+                </a>
             </li>
         </ul>
     </div>
@@ -100,7 +102,9 @@
     <div class="follow-list">
         <ul>
             <li th:each="follower : ${followerList}">
+                <a th:href="@{|/user/@${follower.username}/home|}">
                 <span th:text="${follower.username}"></span>
+                </a>
             </li>
         </ul>
     </div>

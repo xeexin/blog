@@ -157,7 +157,11 @@
             <span th:text="${seriesName}">시리즈 이름</span>
         </div>
         <div class="post-meta">
-            <img th:src="@{'/img/' + ${blog.profileImg.attachFile.storeFileName}}" alt="Profile Image" class="profile-img">
+            <a th:href="@{|/user/@${blog.user.username}/home|}">
+                <img th:src="@{'/img/' + ${blog.profileImg.attachFile.storeFileName}}"
+                     alt="Profile Image"
+                     class="profile-img"/>
+            </a>
             <p>작성자: <span th:text="${post.blog.user.username}"></span></p>
             <p>작성일시 : <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}">작성일시</span></p>
         </div>
