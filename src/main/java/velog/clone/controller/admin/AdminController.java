@@ -11,11 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import velog.clone.Const.SessionConst;
-import velog.clone.domain.Blog;
-import velog.clone.domain.Post;
-import velog.clone.domain.Role;
-import velog.clone.domain.User;
+import velog.clone.domain.*;
 import velog.clone.service.BlogService;
+import velog.clone.service.CommentService;
 import velog.clone.service.PostService;
 import velog.clone.service.UserService;
 
@@ -27,8 +25,8 @@ import java.util.List;
 public class AdminController {
 
     private final UserService userService;
-    private final BlogService blogService;
     private final PostService postService;
+    private final CommentService commentService;
 
     @GetMapping("/admin")
     public String showAdmin(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser, Model model) {
@@ -50,6 +48,11 @@ public class AdminController {
         User user = userService.findByUsername(loginUser.getUsername());
 
         if (user.getRole() == Role.ADMIN) {
+            List<Comment> comments = commentService.findByPostId(postId);
+
+            for (Comment comment : comments) {
+                commentService.deleteComment(comment);
+            }
             postService.deletePost(postId);
             return ResponseEntity.ok().build();
         } else {

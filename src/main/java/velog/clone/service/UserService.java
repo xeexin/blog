@@ -22,8 +22,6 @@ public class UserService {
     private final ImgFileRepository imgFileRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    private final FollowingRepository followingRepository;
-    private final FollowerRepository followerRepository;
 
 
     public User findByUsername(String username) {
@@ -87,14 +85,6 @@ public class UserService {
             // 좋아요 삭제
             user.getLikes().clear(); // 예시: 사용자가 누른 모든 좋아요를 삭제하는 경우
 
-          // 팔로워 및 팔로잉 삭제
-/*
-        List<Follower> followers = followerRepository.findByFollowerId(user.getId());
-        followerRepository.deleteAll(followers);
-
-        List<Following> followings = followingRepository.findByUserId(user.getId());
-        followingRepository.deleteAll(followings);
-*/
 
             // 블로그 삭제
             Blog blog = user.getBlog();

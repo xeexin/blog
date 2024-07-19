@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriComponentsBuilder;
+import velog.clone.Const.SessionConst;
 import velog.clone.File.FileStore;
 import velog.clone.domain.Blog;
 import velog.clone.domain.User;
@@ -61,18 +63,26 @@ public class myPageController {
     @PostMapping ("/@{username}/myPage/edit")
     public String EditProfile(@RequestParam("username") String username,
                               @RequestParam("title") String title,
-                              @RequestParam("profileImg") MultipartFile profileImg, RedirectAttributes attributes) {
-        User user = userService.findByUsername(username);
+                              @RequestParam("profileImg") MultipartFile profileImg, RedirectAttributes attributes,
+                              @SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser) {
+
+        User currentUser = userService.findByUsername(loginUser.getUsername());
 
         try {
-            userService.updateUserProfile(user.getId(), username, title, profileImg);
+            userService.updateUserProfile(currentUser.getId(), username, title, profileImg);
             attributes.addFlashAttribute("message", "프로필이 성공적으로 업데이트되었습니다.");
         } catch (IOException e) {
             attributes.addFlashAttribute("error", "프로필 업데이트 중 오류가 발생했습니다.");
             return "redirect:/{id}/myPage/edit";
         }
 
-        return "redirect:/@{username}/myPage";
+        String encodedUsername = UriComponentsBuilder.fromPath(username)
+                .build()
+                .encode()
+                .toUriString();
+
+        return "redirect:/@" + encodedUsername + "/myPage";
+
     }
 
     @PostMapping("/@{username}/myPage/secession")

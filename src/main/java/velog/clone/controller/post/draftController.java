@@ -86,12 +86,6 @@ public class draftController {
         }
         postService.savePost(post); // 업데이트된 포스트 저장
 
-        // URL 인코딩 처리
-        String encodedUsername = UriComponentsBuilder.fromPath(username)
-                .build()
-                .encode()
-                .toUriString();
-
         return "redirect:/";
     }
 
@@ -106,13 +100,6 @@ public class draftController {
         if (post != null && post.isDraft()) {
             postService.deletePost(post.getId());
         }
-
-        // URL 인코딩 처리
-        String encodedUsername = UriComponentsBuilder.fromPath(username)
-                .build()
-                .encode()
-                .toUriString();
-
 
         return "redirect:/";
 

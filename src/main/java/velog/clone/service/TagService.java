@@ -28,18 +28,6 @@ public class TagService {
         return tagRepository.save(tag);
     }
 
-    public List<Tag> findAllTags() {
-        return tagRepository.findAll();
-    }
-
-    public Tag findTagById(Long id) {
-        return tagRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid tag Id:" + id));
-    }
-
-    public void deleteTag(Long id) {
-        tagRepository.deleteById(id);
-    }
-
     public Optional<Tag> findByName(String name) {
         return tagRepository.findByName(name);
     }

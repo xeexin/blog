@@ -25,7 +25,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CreateBlogController {
 
-    private final UserRepository userRepository;
     private final BlogService blogService;
     private final UserService userService;
 

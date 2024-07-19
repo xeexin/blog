@@ -19,12 +19,6 @@ public class SeriesService {
 
     // Series : id, Post , SeriesName
 
-    public Series createSeries(Post post, String seriesName) {
-        Series series = new Series();
-        series.setSeriesName(seriesName);
-        return seriesRepository.save(series);
-    }
-
 
     public List<Series> findByBlogId(Long blogId) {
         return seriesRepository.findByBlogId(blogId);

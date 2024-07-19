@@ -26,10 +26,8 @@ import java.util.Optional;
 @Slf4j
 public class SeriesController {
     private final UserService userService;
-    private final PostService postService;
     private final BlogService blogService;
     private final SeriesService seriesService;
-    private final BlogRepository blogRepository;
 
     @GetMapping("/@{username}/series")
     public String showSeries(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User currentUser,

@@ -9,6 +9,5 @@ import velog.clone.repository.LikeRepository;
 @Service
 @RequiredArgsConstructor
 public class LikeService {
-    private final LikeRepository likeRepository;
 
 }

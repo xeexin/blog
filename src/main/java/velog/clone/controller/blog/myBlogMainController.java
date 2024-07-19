@@ -24,7 +24,6 @@ public class myBlogMainController {
 
     private final UserRepository userRepository;
     private final BlogRepository blogRepository;
-    private final PostRepository postRepository;
     private final PostService postService;
 
 
@@ -44,7 +43,6 @@ public class myBlogMainController {
 
                 List<Post> posts = postService.findByBlogAndDraftFalse(user.get().getBlog().getId());
 
-//                List<Post> posts = postRepository.findByBlogId(blogUser.get().getId());
 
                 model.addAttribute("posts", posts);
 

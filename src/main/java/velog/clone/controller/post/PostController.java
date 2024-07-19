@@ -169,11 +169,6 @@ public class PostController {
         User user = userService.findByUsername(username);
         Post post = postService.findByPostTitleAndUser(postTitle, user);
 
-        String encodedUsername = UriComponentsBuilder.fromPath(username)
-                .build()
-                .encode()
-                .toUriString();
-
         List<Comment> comments = commentService.findByPostId(post.getId());
         for (Comment comment : comments) {
             commentService.deleteComment(comment);
@@ -249,13 +244,6 @@ public class PostController {
     private void setSeriesForPost(PostDTO postDTO, Blog blog, Post post) {
         if (postDTO.getSeriesName() != null && !postDTO.getSeriesName().isEmpty()) {
             post.setSeriesName(postDTO.getSeriesName());
-//            List<Series> seriesList = seriesService.findByBlogId(blog.getId());
-//            for (Series series : seriesList) {
-//                if (series.getSeriesName().equals(postDTO.getSeriesName())) {
-//                    post.setSeriesName(series);
-//                    break;
-//                }
-//            }
         }
     }
 }

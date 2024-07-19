@@ -48,23 +48,6 @@ public class PostService {
             post.addTag(tag);
         }
 
-        // 시리즈 설정 로직
-//        if (postDTO.getSeriesName() != null && !postDTO.getSeriesName().isEmpty()) {
-//            List<Series> seriesList = seriesService.findByPostId(post.getId());
-//            for (Series series : seriesList) {
-//                String seriesName = series.getSeriesName();
-//
-//                if (seriesName == post.getSeries().getSeriesName()) {
-//                    series = new Series();
-//                    series.setSeriesName(postDTO.getSeriesName());
-//                    series.setBlog(blog);
-//                    series.setPost(post);
-//
-//                    post.setSeries(series);
-//                }
-//            }
-//        }
-
         return post;
 
     }
@@ -101,32 +84,18 @@ public class PostService {
 
 
 
-    public void deletePost(Post post) {
-        postRepository.delete(post);
-    }
-
     @Transactional
     public Post savePost(Post post) {
         return postRepository.save(post);
     }
 
-    public Post findByPostId(Long id) {
-        return postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("포스트를 찾을 수 없습니다."));
-    }
+
 
     public Post findByPostTitle(String postTitle) {
         return postRepository.findByTitle(postTitle)
                 .orElseThrow(() -> new IllegalArgumentException("포스트를 찾을 수 없습니다."));
     }
 
-    public List<Post> findAllPosts() {
-        return postRepository.findAll();
-    }
-
-    public Post findPostById(Long id) {
-        return postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid post Id:" + id));
-    }
 
     public void deletePost(Long id) {
         postRepository.deleteById(id);
@@ -155,9 +124,6 @@ public class PostService {
         return postRepository.findByBlogIdAndDraftTrue(blodId);
     }
 
-    public List<Post> findPublishedPostsByBlogId(Long blogId) {
-        return postRepository.findByBlogIdAndDraftFalse(blogId);
-    }
 
     public List<Post> findAllPublishedPosts() {
         return postRepository.findByDraftFalse();
@@ -168,14 +134,6 @@ public class PostService {
 
     }
 
-    public Post getPostById(Long postId) {
-        return postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
-    }
-
-//    public List<Series> findByUser(User user) {
-//        return postRepository.findByUser(user);
-//    }
 
     public List<Post> findByBlog(Blog blog) {
         return postRepository.findByBlogId(blog.getId());
